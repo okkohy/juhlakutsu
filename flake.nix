@@ -22,15 +22,21 @@
             cp ./*.py $out/bin
             '';
         };
+        commonPkgs = with pkgs; [
+          python311
+          python311Packages.flask
+          sqlite
+        ];
       in
       {
         devShells.default = pkgs.mkShell {
           packages = [
-            pkgs.python311
-            pkgs.python311Packages.flask
+            # pkgs.python311
+            # pkgs.python311Packages.flask
             pkgs.python311Packages.pylint # linter
             pkgs.python311Packages.pylsp-mypy # lsp
-          ];
+            pkgs.python311Packages.black # formatter
+          ] ++ commonPkgs;
 
           shellHook = ''
             python --version
@@ -45,10 +51,9 @@
         packages.default = pkgs.writeShellApplication {
           name = "run";
           runtimeInputs = [
-            pkgs.python311
-            pkgs.python311Packages.flask
+
             # app
-          ];
+          ] ++ commonPkgs;
           # TODO add database initialization
           text = ''
           echo "Starting flask development server..."
