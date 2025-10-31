@@ -14,12 +14,14 @@
         app = pkgs.stdenv.mkDerivation rec {
           pname = "dev";
           version = "0.1.0";
-          src = ./src;
+          src = ./.;
           
           # TODO Add templates and such
           installPhase = ''
-            mkdir -p $out/bin
-            cp ./*.py $out/bin
+            mkdir -p $out/src
+            cp src/*.py $out/src
+            cp main.py $out
+            cp -r ./templates $out
             '';
         };
         commonPkgs = with pkgs; [
@@ -51,13 +53,12 @@
         packages.default = pkgs.writeShellApplication {
           name = "run";
           runtimeInputs = [
-
             # app
           ] ++ commonPkgs;
           # TODO add database initialization
           text = ''
           echo "Starting flask development server..."
-          flask --app ${app}/bin/main run
+          flask run
           '';
           };
         # packages.default = app;
