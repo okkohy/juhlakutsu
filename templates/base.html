@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body> 
+
+    <header>
+      <nav>
+        <a href="/">Etusivu</a> |
+        <a href="/find_party">Haku</a> |
+        {% if session.user_id %}
+        <a href="/new_party">Luo kutsu</a> |
+        <p>
+          Olet kirjautunut nimellä
+          <a href="/user/{{ session.user_id }}">{{ session.displayname }}</a>
+        </p>
+        <a href="/logout">Kirjaudu ulos</a>
+        {% else %}
+        <a href="/login">Kirjaudu sisään</a> |
+        <a href="/register">Luo tunnus</a>
+        {% endif %}
+      </nav>
+    </header>
+
+
+    {% for message in get_flashed_messages() %}
+    <div class="info">
+      {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}  
+
+  </body>
+</html>

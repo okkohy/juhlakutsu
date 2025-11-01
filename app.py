@@ -20,11 +20,14 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        result = db.query("SELECT displayname FROM users WHERE username = ?", [username])
+        displayname = result[0][0]
 
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            session["displayname"] = displayname
             session["csrf_token"] = secrets.token_hex(16)
             # Success
             return redirect("/")
@@ -42,6 +45,7 @@ def register():
     elif request.method == "POST":
 
         username = request.form["username"]
+        displayname = request.form["displayname"]
         password1 = request.form["password"]
         password2 = request.form["password2"]
         if password1 != password2:
@@ -49,8 +53,8 @@ def register():
         password_hash = generate_password_hash(password1)
 
         try:
-            sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-            db.execute(sql, [username, password_hash])
+            sql = "INSERT INTO users (username, displayname, password_hash) VALUES (?, ?, ?)"
+            db.execute(sql, [username, displayname, password_hash])
         except sqlite3.IntegrityError:
             flash("VIRHE: tunnus on jo varattu")
             return redirect("/register")

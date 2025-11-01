@@ -1,8 +1,8 @@
 CREATE TABLE users (
     id INTEGER PRIMARY KEY
     , username TEXT UNIQUE
-    , displayname TEXT
-    , password_hash TEXT
+    , displayname TEXT NOT NULL
+    , password_hash TEXT NOT NULL
 );
 
 CREATE TABLE parties (
