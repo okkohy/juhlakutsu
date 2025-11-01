@@ -1,4 +1,5 @@
 from werkzeug.security import check_password_hash
+from flask import session, request, abort
 import src.db as db
 
 
@@ -14,3 +15,15 @@ def check_login(username: str, password: str) -> int | None:
         return user_id
     else:
         return None
+
+
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
+
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)

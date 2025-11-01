@@ -11,19 +11,20 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        app = pkgs.stdenv.mkDerivation rec {
-          pname = "dev";
-          version = "0.1.0";
-          src = ./.;
-          
-          # TODO Add templates and such
-          installPhase = ''
-            mkdir -p $out/src
-            cp src/*.py $out/src
-            cp main.py $out
-            cp -r ./templates $out
-            '';
-        };
+        # app = pkgs.stdenv.mkDerivation rec {
+        #   pname = "dev";
+        #   version = "0.1.0";
+        #   src = ./.;
+        #
+        #   # TODO Add templates and such
+        #   installPhase = ''
+        #     mkdir -p $out/src
+        #     cp src/*.py $out/src
+        #     cp app.py $out
+        #     cp -r ./templates $out
+        #     cp -r ./static $out
+        #     '';
+        # };
         commonPkgs = with pkgs; [
           python311
           python311Packages.flask
@@ -33,15 +34,14 @@
       {
         devShells.default = pkgs.mkShell {
           packages = [
-            # pkgs.python311
-            # pkgs.python311Packages.flask
             pkgs.python311Packages.pylint # linter
             pkgs.python311Packages.pylsp-mypy # lsp
             pkgs.python311Packages.black # formatter
           ] ++ commonPkgs;
 
           shellHook = ''
-            python --version
+            flask --version
+            sqlite3 --version
           '';
         };
         apps.default = { 
@@ -55,10 +55,9 @@
           runtimeInputs = [
             # app
           ] ++ commonPkgs;
-          # TODO add database initialization
           text = ''
-          echo "Starting flask development server..."
-          flask run
+            echo "Starting flask development server..."
+            flask run
           '';
           };
         # packages.default = app;

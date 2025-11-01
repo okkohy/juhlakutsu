@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Kirjaudu sisään{% endblock %}
+
+{% block content %}
+<div class="party-big">
+  <h3>{{ party.title }}</h3>
+  <p> {{ party.description }} </p>
+
+  <h4>Järjestäjä</h4>
+  <p>{{ party.organizer }}</p>
+
+  <h4>Vieraiden määrä</h4>
+  <p> {{ party.guest_count }} </p>
+
+  <h4>Päivämäärä</h4>
+  <p class="datetime">{{ party.start_date }}</p>
+
+  <h4>Sisäänpääsymaksu</h4>
+  <p class="fee">{{ party.entry_fee }} &euro;</p>
+
+  {% if session.user_id %}
+    {% if session.user_id != party.organizer_id %}
+      <form action="/attend" method="post">
+        <input type="hidden" name="guest_name" value="">
+        <button type="submit">Ilmottaudu</button>
+      </form>
+    {% else %}
+      <form action="/edit/{{ party.id }}" method="post">
+        <input type="hidden" name="guest_name" value="">
+        <button type="submit">Muokkaa</button>
+      </form>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

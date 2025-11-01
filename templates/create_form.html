@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Luo juhlakutsu{% endblock %}
+
+{% block content %}
+<form action="/create" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+  </br >
+  <label for="title">Juhlien nimi</label> </br >
+  <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="Juhlien nimi"
+      maxlength="50"
+      required>
+  </br >
+  <label for="description">Kuvaus</label> </br >
+  <textarea
+      id="description"
+      rows="8"
+      cols="60"
+      name="description"
+      placeholder="Kuvaus"
+      maxlength="2000"
+      required></textarea>
+  </br >
+  <label for="start_date">Alkamis ajankohta</label> </br >
+  <input
+      type="datetime-local"
+      id="start_date"
+      name="start_date"
+      placeholder="Valitse"
+      required>
+  </br >
+  <label for="entry_fee">Sisäänpääsymaksu</label> </br >
+  <input
+      type="number"
+      id="entry_fee"
+      name="entry_fee"
+      placeholder="Hinta (&euro;)"
+      >
+  <button type="submit">Luo</button>
+</form>
+{% endblock %}

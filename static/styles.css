@@ -1,0 +1,13 @@
+
+h1, h2 {
+  color: red;
+  text-decoration: underline;
+}
+
+.parties {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 10px;
+  margin-left: 20vw;
+  margin-right: 20vw;
+}
