@@ -14,5 +14,16 @@
     </ul>
   </header>
   <h1>Juhlakutsut</h1>
+
+
+  <div class="parties">
+    {% for party in parties %}
+    <div class="party">
+      <a href="/party/{{ party.id }}">
+        {{ party.title }}
+      </a>
+    </div>
+    {% endfor %}
+  </div>
   </body>
 </html>
