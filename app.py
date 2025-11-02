@@ -23,15 +23,15 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        result = db.query(
-            "SELECT displayname FROM users WHERE username = ?", [username]
-        )
-        displayname = result[0][0]
 
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            result = db.query(
+                "SELECT displayname FROM users WHERE username = ?", [username]
+            )
+            displayname = result[0][0]
             session["displayname"] = displayname
             session["csrf_token"] = secrets.token_hex(16)
             # Success
@@ -103,7 +103,6 @@ def edit_party(party_id: int):
     if request.method == "GET":
         return render_template("edit_form.html", party=maybe_party)
     # elif method == "POST":
-    print("hi")
     users.check_csrf()
     title = request.form["title"]
     description = request.form["description"]

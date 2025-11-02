@@ -24,14 +24,14 @@
   {% endif %}
 
   {% if session.user_id %}
-    {% if session.user_id != party.organizer_id %}
-      <form action="/attend" method="post">
-        <input type="hidden" name="guest_name" value="">
-        <button type="submit">Ilmottaudu</button>
-      </form>
-    {% else %}
+    {% if session.user_id == party.organizer_id %}
       <form action="/edit/{{ party.id }}" method="get">
         <button type="submit">Muokkaa</button>
+      </form>
+    {% else %}
+      <form action="/attend/{{ party.id }}" method="post">
+        <input type="hidden" name="guest_id" value="{{ session.user_id }}">
+        <button type="submit">Ilmottaudu</button>
       </form>
     {% endif %}
   {% endif %}

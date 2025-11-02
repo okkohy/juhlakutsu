@@ -16,7 +16,13 @@ def get_party(party_id: int) -> dict | None:
             LEFT JOIN guests ON parties.id = guests.party_id
             WHERE parties.id = ?"""
     party_result = db.query(sql, [party_id])
-    if party_result is not None:
+    if party_result is not None and len(party_result) != 0:
+        if party_result[0][0] is None:
+            # because we use COUNT the object is non null
+            # but has fields None except guest_count = 0
+            # so we have to do this extra check so we can correctly
+            # return a 404
+            return None
         party = {
             "title": party_result[0][0],
             "description": party_result[0][1],
@@ -25,7 +31,7 @@ def get_party(party_id: int) -> dict | None:
             "organizer": party_result[0][7],
             "id": party_result[0][5],
             "guest_count": party_result[0][8],
-            "organizer_id": party_result[0][5],
+            "organizer_id": party_result[0][6],
         }
         return party
 
