@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Etsi juhlia{% endblock %}
+
+{% block content %}
+<h2>Etsi juhlia</h2>
+
+<form action="/search" method="get">
+  <p>
+    <label for="query">Hakusana</label>:
+    <input type="text" name="query" id="query" value="{{ query }}">
+  </p>
+  <button type="submit">Etsi</button>
+</form>
+
+{% if query %}
+<h3>Tulokset</h3>
+
+<ul class="parties">
+  {% for party in parties %}
+  <div class="party">
+    <a href="/party/{{ party.id }}">{{ party.title }}</a>
+    <br />
+    Järjestäjä: <a href="/user/{{ party.organizer_id }}">{{ party.organizer_displayname }}</a>
+    <br />
+    {% if party.entry_fee %}
+      <span class="fee">{{ party.entry_fee }} &euro;</span>
+    {%else%}
+      <span>Ilmanen</span>
+    {% endif %}
+    <span class="datetime">{{ party.start_date }}</span>
+    <br />
+    <!-- Vieraiden määrä: {{ party.guest_count }} -->
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

@@ -131,6 +131,16 @@ def show_party(party_id: int):
         return abort(404)
 
 
+@app.route("/search/")
+def search():
+    query = request.args.get("query")
+    if query is not None:
+        parties = party.search_parties(query)
+        return render_template("search_form.html", query=query, parties=parties)
+    else:
+        return render_template("search_form.html")
+
+
 @app.route("/")
 def index():
     parties = party.get_parties()

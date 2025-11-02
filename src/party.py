@@ -76,3 +76,37 @@ def edit_party(party_id, new_title, new_description, new_start_date, new_entry_f
     db.execute(
         sql, [new_title, new_description, new_start_date, new_entry_fee, party_id]
     )
+
+
+def search_parties(query: str) -> list:
+    # ORDER BY ASC makes sure that the parties
+    # get shown such that the party that will start
+    # soonest will be first
+    # TODO: Filter parties where today > start_date
+    sql = """SELECT
+             parties.id
+             , parties.title
+             , parties.description
+             , parties.start_date
+             , parties.entry_fee
+             , parties.user_id
+             , users.displayname
+             FROM parties
+             LEFT JOIN users ON parties.user_id = users.id
+             WHERE title LIKE ? OR description LIKE ?
+             ORDER BY start_date ASC"""
+    like = f"%{query}%"
+    result = db.query(sql, [like, like])
+    parties = [
+        {
+            "id": party[0],
+            "title": party[1],
+            "description": party[2],
+            "start_date": party[3],
+            "entry_fee": party[4],
+            "organizer_id": party[5],
+            "organizer_displayname": party[6],
+        }
+        for party in result
+    ]
+    return parties
