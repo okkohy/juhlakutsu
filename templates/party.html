@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Kirjaudu sisään{% endblock %}
+{% block title %}Kutsu {{ party.title }} juhliin{% endblock %}
 
 {% block content %}
 <div class="party-big">
@@ -17,7 +17,11 @@
   <p class="datetime">{{ party.start_date }}</p>
 
   <h4>Sisäänpääsymaksu</h4>
-  <p class="fee">{{ party.entry_fee }} &euro;</p>
+  {% if party.entry_fee %}
+    <p class="fee">{{ party.entry_fee }} &euro;</p>
+  {% else %}
+    <p>Ilmainen</p>
+  {% endif %}
 
   {% if session.user_id %}
     {% if session.user_id != party.organizer_id %}
@@ -26,8 +30,7 @@
         <button type="submit">Ilmottaudu</button>
       </form>
     {% else %}
-      <form action="/edit/{{ party.id }}" method="post">
-        <input type="hidden" name="guest_name" value="">
+      <form action="/edit/{{ party.id }}" method="get">
         <button type="submit">Muokkaa</button>
       </form>
     {% endif %}

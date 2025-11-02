@@ -8,6 +8,7 @@ import src.db as db
 import sqlite3
 
 import src.users as users
+import src.party as party
 
 app = Flask(__name__)
 # app.secret_key = secrets.token_hex(16)
@@ -42,7 +43,7 @@ def login():
         abort(make_response("Illegal method"))
 
 
-@app.route("/register", methods=["POST", "GET"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
         return render_template("register_form.html")
@@ -69,7 +70,7 @@ def register():
         abort(make_response("Illegal method"))
 
 
-@app.route("/create", methods=["POST", "GET"])
+@app.route("/create", methods=["GET", "POST"])
 def create_party():
     if request.method == "GET":
         return render_template("create_form.html")
@@ -91,61 +92,46 @@ def create_party():
         abort(make_response("Illegal method"))
 
 
+@app.route("/edit/<int:party_id>", methods=["GET", "POST"])
+def edit_party(party_id: int):
+    users.require_login()
+    maybe_party = party.get_party(party_id)
+    if maybe_party is None:
+        abort(404)
+    if maybe_party["organizer_id"] != session["user_id"]:
+        abort(403)
+    if request.method == "GET":
+        return render_template("edit_form.html", party=maybe_party)
+    # elif method == "POST":
+    print("hi")
+    users.check_csrf()
+    title = request.form["title"]
+    description = request.form["description"]
+    start_date = request.form["start_date"]
+    entry_fee = request.form["entry_fee"]
+    try:
+        party.edit_party(party_id, title, description, start_date, entry_fee)
+        return redirect(f"/party/{party_id}")
+    except ValueError as err:
+        flash(str(err))
+        abort(403)
+
+
+@app.route("/delete/<int:party_id>")
+def delete_party(party_id: int):
+    return abort(404)
+
+
 @app.route("/party/<int:party_id>")
 def show_party(party_id: int):
-    sql = """SELECT
-            parties.title
-            , parties.description
-            , parties.start_date
-            , parties.entry_fee
-            , parties.user_id
-            , parties.id
-            , users.id
-            , users.displayname
-            , COUNT (guests.id) guest_count
-            FROM parties JOIN users ON parties.user_id = users.id
-            LEFT JOIN guests ON parties.id = guests.party_id
-            WHERE parties.id = ?"""
-    party_result = db.query(sql, [party_id])
-    if party_result is not None:
-        party = {
-            "title": party_result[0][0],
-            "description": party_result[0][1],
-            "start_date": party_result[0][2],
-            "entry_fee": party_result[0][3],
-            "organizer": party_result[0][7],
-            "id": party_result[0][5],
-            "guest_count": party_result[0][8],
-            "organizer_id": party_result[0][5],
-        }
-        return render_template("party.html", party=party)
+    maybe_party = party.get_party(party_id)
+    if maybe_party is not None:
+        return render_template("party.html", party=maybe_party)
     else:
         return abort(404)
 
 
 @app.route("/")
 def index():
-    sql = """
-    SELECT parties.id
-    , parties.title
-    , parties.description
-    , parties.start_date
-    , parties.entry_fee
-    , parties.user_id
-    , users.displayname
-    FROM parties LEFT JOIN users ON parties.user_id = users.id
-    """
-    result = db.query(sql, [])
-    parties = [
-        {
-            "id": party[0],
-            "title": party[1],
-            "description": party[2],
-            "start_date": party[3],
-            "entry_fee": party[4],
-            "organizer_id": party[5],
-            "organizer_displayname": party[6],
-        }
-        for party in result
-    ]
+    parties = party.get_parties()
     return render_template("index.html", parties=parties)
