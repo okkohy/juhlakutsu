@@ -45,6 +45,7 @@
   <button type="submit">Päivitä</button>
 </form>
 <p>
-  <a href="/party/{{ party.id }}">Peruuta</a>
+  <a href="/party/{{ party.id }}" class="cancel">Peruuta</a>
+  <a href="/delete/{{ party.id }}" class="delete">Poista</a>
 </p>
 {% endblock %}

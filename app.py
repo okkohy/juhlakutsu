@@ -116,9 +116,28 @@ def edit_party(party_id: int):
         abort(403)
 
 
-@app.route("/delete/<int:party_id>")
+@app.route("/delete/<int:party_id>", methods=["GET", "POST"])
 def delete_party(party_id: int):
-    return abort(404)
+    users.require_login()
+    maybe_party = party.get_party(party_id)
+
+    if maybe_party is not None:
+        if session["user_id"] != maybe_party["organizer_id"]:
+            return abort(403)
+    else:
+        return abort(404)
+
+    if request.method == "GET":
+        return render_template("delete_form.html", party=maybe_party)
+
+    # else mehtod == "POST"
+    users.check_csrf()
+    if "remove" in request.form:
+        party.delete_party(party_id)
+        flash("Juhla poistettu")
+        return redirect("/")
+    else:
+        return redirect(f"/party/{party_id}")
 
 
 @app.route("/party/<int:party_id>")

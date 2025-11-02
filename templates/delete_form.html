@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Poista juhla{% endblock %}
+
+{% block content %}
+<h2>{{ party.title }}</h2>
+<h3>Poista juhla</h3>
+<p>Haluatko varmasti poistaa juhlan?</p>
+<form action="/delete/{{ party.id }}" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <button type="submit" name="remove">Poista</button>
+  <button type="submit" name="back">Palaa takaisin</button>
+</form>
+<p>
+  <a href="/party/{{ party.id }}">Takaisin ilmoitukseen</a>
+</p>
+{% endblock %}
