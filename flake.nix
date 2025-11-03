@@ -56,6 +56,10 @@
             # app
           ] ++ commonPkgs;
           text = ''
+            if [ ! -f ./database.db ]; then
+              echo "Initializing database"
+              sqlite3 database.db < schema.sql
+            fi
             echo "Starting flask development server..."
             flask run
           '';
