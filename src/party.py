@@ -69,6 +69,7 @@ def delete_party(party_id):
     """
     db.execute(sql, [party_id])
 
+
 def edit_party(party_id, new_title, new_description, new_start_date, new_entry_fee):
     # Data validation
     if len(new_title) > 50:

@@ -15,7 +15,7 @@ CREATE TABLE parties (
     /* if organizer is deleted, delete party */
     , CONSTRAINT fk_host_parties
       FOREIGN KEY (user_id)
-      REFERENCES users(id)
+      REFERENCES users (id)
       ON DELETE CASCADE
 );
 
@@ -30,8 +30,8 @@ CREATE TABLE guests (
       REFERENCES users (id)
       ON DELETE CASCADE
     , CONSTRAINT fk_party_guests
-      FOREIGN KEY (user_id)
-      REFERENCES users (id)
+      FOREIGN KEY (party_id)
+      REFERENCES parties (id)
       ON DELETE CASCADE
 );
 

@@ -22,7 +22,7 @@ def last_insert_id() -> int | None:
     return g.last_insert_id
 
 
-def query(sql: str, params=[]) -> Any:
+def query(sql: str, params=[]) -> list[Any]:
     con = get_connection()
     result = con.execute(sql, params).fetchall()
     con.close()
