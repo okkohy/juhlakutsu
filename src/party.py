@@ -121,3 +121,30 @@ def search_parties(query: str) -> list:
         for party in result
     ]
     return parties
+
+
+def get_guests(party_id: int) -> list:
+    sql = """
+    SELECT user_id FROM guests WHERE party_id = ?
+    """
+    return db.query(sql, [party_id])
+
+
+def add_guest(party_id: int, user_id: int) -> None:
+    sql = """
+        SELECT party_id, user_id
+        FROM guests WHERE party_id = ? AND user_id = ?
+    """
+    result = db.query(sql, [party_id, user_id])
+    if len(result) == 0:
+        sql = """
+        INSERT INTO guests (party_id, user_id) VALUES (?, ?)
+        """
+        db.execute(sql, [party_id, user_id])
+
+
+def remove_guest(party_id: int, user_id: int) -> None:
+    sql = """
+    DELETE FROM guests WHERE party_id = ? AND user_id = ?
+    """
+    db.execute(sql, [party_id, user_id])

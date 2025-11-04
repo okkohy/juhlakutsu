@@ -139,12 +139,34 @@ def delete_party(party_id: int):
     else:
         return redirect(f"/party/{party_id}")
 
+@app.route("/attend/<int:party_id>", methods=["POST"])
+def attend(party_id: int):
+    users.require_login()
+    users.check_csrf()
+    maybe_party = party.get_party(party_id)
+
+    if maybe_party is None:
+        return abort(404)
+
+    if "attend" in request.form:
+        party.add_guest(party_id, session["user_id"])
+        flash("Ilmottautuminen hyväksytty.")
+        return redirect(f"/party/{party_id}")
+    else:
+        flash("Ilmottautuminen peruttu.")
+        party.remove_guest(party_id, session["user_id"])
+        return redirect(f"/party/{party_id}")
 
 @app.route("/party/<int:party_id>")
 def show_party(party_id: int):
     maybe_party = party.get_party(party_id)
+    guests = party.get_guests(party_id)
+
+    current_user_id = session.get("user_id")
+
+    current_user_is_guest = guests is not None and current_user_id is not None and len(guests) != 0 and current_user_id in guests[0]
     if maybe_party is not None:
-        return render_template("party.html", party=maybe_party)
+        return render_template("party.html", party=maybe_party, is_guest=current_user_is_guest)
     else:
         return abort(404)
 

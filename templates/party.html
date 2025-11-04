@@ -29,10 +29,17 @@
         <button type="submit">Muokkaa</button>
       </form>
     {% else %}
+      {% if is_guest %}
       <form action="/attend/{{ party.id }}" method="post">
-        <input type="hidden" name="guest_id" value="{{ session.user_id }}">
-        <button type="submit">Ilmottaudu</button>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <button type="submit" name="cancel">Peru ilmottautuminen</button>
       </form>
+      {% else %}
+      <form action="/attend/{{ party.id }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <button type="submit" name="attend">Ilmottaudu</button>
+      </form>
+      {% endif %}
     {% endif %}
   {% endif %}
 </div>
