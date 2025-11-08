@@ -63,6 +63,37 @@ def get_parties():
     return parties
 
 
+def get_attended(user_id):
+    sql = """
+    SELECT parties.id
+    , parties.title
+    , parties.description
+    , parties.start_date
+    , parties.entry_fee
+    , parties.user_id
+    , users.displayname
+    FROM parties RIGHT JOIN guests ON parties.id = guests.party_id
+    LEFT JOIN users ON parties.user_id = users.id
+    WHERE guests.user_id = ?
+    """
+    result = db.query(sql, [user_id])
+    parties = [
+        {
+            "id": party[0],
+            "title": party[1],
+            "description": party[2],
+            "start_date": party[3],
+            "entry_fee": party[4],
+            "organizer_id": party[5],
+            "organizer_displayname": party[6],
+        }
+        for party in result
+    ]
+    return parties
+
+
+
+
 def delete_party(party_id):
     sql = """
     DELETE FROM parties WHERE id = ?

@@ -8,7 +8,7 @@
   <p> {{ party.description }} </p>
 
   <h4>Järjestäjä</h4>
-  <p>{{ party.organizer }}</p>
+  <a href="/user/{{ party.organizer_id }}">{{ party.organizer }}</a>
 
   <h4>Vieraiden määrä</h4>
   <p> {{ party.guest_count }} </p>

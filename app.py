@@ -180,6 +180,26 @@ def show_party(party_id: int):
         return abort(404)
 
 
+@app.route("/user/<int:user_id>")
+def show_user(user_id: int):
+    maybe_user = users.get_user(user_id)
+    parties = users.get_parties(user_id)
+    attended_parties = party.get_attended(user_id)
+
+    current_user_id = session.get("user_id")
+
+    party_count = len(parties)
+    attend_count = len(attended_parties)
+
+    if maybe_user is not None:
+        return render_template(
+            "user.html", user=maybe_user, parties=parties, attended=attended_parties, party_count=party_count, attend_count=attend_count
+        )
+    else:
+        return abort(404)
+
+
+
 @app.route("/search/")
 def search():
     query = request.args.get("query")
