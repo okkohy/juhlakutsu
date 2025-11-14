@@ -113,7 +113,7 @@ def edit_party(party_id: int):
         return redirect(f"/party/{party_id}")
     except ValueError as err:
         flash(str(err))
-        abort(403)
+        return abort(403)
 
 
 @app.route("/delete/<int:party_id>", methods=["GET", "POST"])
