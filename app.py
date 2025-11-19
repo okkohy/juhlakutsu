@@ -73,7 +73,8 @@ def register():
 @app.route("/create", methods=["GET", "POST"])
 def create_party():
     if request.method == "GET":
-        return render_template("create_form.html")
+        categories = party.get_categories()
+        return render_template("create_form.html", categories=categories)
     elif request.method == "POST":
         users.require_login()
         users.check_csrf()
@@ -82,10 +83,17 @@ def create_party():
         description = request.form["description"]
         start_date = request.form["start_date"]
         entry_fee = request.form["entry_fee"]
+        category_id = request.form["category"]
         sql = """INSERT INTO parties
         (title, description, start_date, entry_fee, user_id)
         VALUES (?, ?, ?, ?, ?)"""
         db.execute(sql, [title, description, start_date, entry_fee, session["user_id"]])
+
+        sql = """
+        INSERT INTO party_categories(party_id, category_id) VALUES (?,?)
+        """
+        party_id = db.last_insert_id()
+        db.execute(sql, [party_id, ])
 
         return redirect(f"/party/{db.last_insert_id()}")
     else:

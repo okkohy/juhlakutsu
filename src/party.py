@@ -180,3 +180,29 @@ def remove_guest(party_id: int, user_id: int) -> None:
     DELETE FROM guests WHERE party_id = ? AND user_id = ?
     """
     db.execute(sql, [party_id, user_id])
+
+
+def get_categories() -> list:
+    sql = """
+    SELECT name FROM categories ORDER BY id
+    """
+    result = db.query(sql)
+    return {
+        "id": category[0],
+        "name": category[1]
+        for category in result
+    }
+
+
+def add_category(party_id: int, category_id: int) -> None:
+    sql = """
+    INSERT INTO party_categories (party_id, category_id) VALUES (?, ?)
+    """
+    db.execute(sql, [party_id, category_id])
+
+
+def edit_category(party_id: int, new_category_id: int) -> None:
+    sql = """
+    UPDATE party_categories SET category_id = ? WHERE party_id = ?
+    """
+    db.execute(sql, [category_id, party_id])

@@ -33,6 +33,14 @@
       placeholder="Valitse"
       required>
   </br >
+  <label for="category">Valitse kategoria</label> </br >
+  <select name="category">
+    <option value="">valitse</option>
+    {% for category in categories %}
+    <option value="{{category.id}}">{{category.name}}</option>
+    {% endfor %}
+  </select>
+  </br >
   <label for="entry_fee">Sisäänpääsymaksu</label> </br >
   <input
       type="number"
