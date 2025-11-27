@@ -11,20 +11,6 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        # app = pkgs.stdenv.mkDerivation rec {
-        #   pname = "dev";
-        #   version = "0.1.0";
-        #   src = ./.;
-        #
-        #   # TODO Add templates and such
-        #   installPhase = ''
-        #     mkdir -p $out/src
-        #     cp src/*.py $out/src
-        #     cp app.py $out
-        #     cp -r ./templates $out
-        #     cp -r ./static $out
-        #     '';
-        # };
         commonPkgs = with pkgs; [
           python311
           python311Packages.flask
@@ -59,6 +45,7 @@
             if [ ! -f ./database.db ]; then
               echo "Initializing database"
               sqlite3 database.db < schema.sql
+              sqlite3 database.db < init.sql
             fi
             echo "Starting flask development server..."
             flask run
