@@ -104,20 +104,27 @@ def create_party():
 def edit_party(party_id: int):
     users.require_login()
     maybe_party = party.get_party(party_id)
+    categories = party.get_categories()
     if maybe_party is None:
         abort(404)
     if maybe_party["organizer_id"] != session["user_id"]:
         abort(403)
+    # Filter out the category that is currently selected
+    categories = [
+            cat for cat in categories if cat["id"] != maybe_party["category_id"]
+            ]
     if request.method == "GET":
-        return render_template("edit_form.html", party=maybe_party)
+        return render_template("edit_form.html", party=maybe_party, categories=categories)
     # elif method == "POST":
     users.check_csrf()
     title = request.form["title"]
     description = request.form["description"]
     start_date = request.form["start_date"]
     entry_fee = request.form["entry_fee"]
+    new_category = request.form["category"]
     try:
         party.edit_party(party_id, title, description, start_date, entry_fee)
+        party.edit_category(party_id, int(new_category))
         return redirect(f"/party/{party_id}")
     except ValueError as err:
         flash(str(err))

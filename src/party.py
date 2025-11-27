@@ -12,8 +12,12 @@ def get_party(party_id: int) -> dict | None:
             , users.id
             , users.displayname
             , COUNT (guests.id) guest_count
+            , categories.name
+            , categories.id
             FROM parties JOIN users ON parties.user_id = users.id
             LEFT JOIN guests ON parties.id = guests.party_id
+            LEFT JOIN party_categories ON parties.id = party_categories.party_id
+            JOIN categories ON party_categories.category_id = categories.id
             WHERE parties.id = ?"""
     party_result = db.query(sql, [party_id])
     if party_result is not None and len(party_result) != 0:
@@ -32,6 +36,8 @@ def get_party(party_id: int) -> dict | None:
             "id": party_result[0][5],
             "guest_count": party_result[0][8],
             "organizer_id": party_result[0][6],
+            "category": party_result[0][9],
+            "category_id": party_result[0][10],
         }
         return party
 
@@ -45,7 +51,11 @@ def get_parties():
     , parties.entry_fee
     , parties.user_id
     , users.displayname
-    FROM parties LEFT JOIN users ON parties.user_id = users.id
+    , categories.name
+    FROM parties
+    LEFT JOIN users ON parties.user_id = users.id
+    LEFT JOIN party_categories ON parties.id = party_categories.party_id
+    JOIN categories ON party_categories.category_id = categories.id
     """
     result = db.query(sql, [])
     parties = [
@@ -57,6 +67,7 @@ def get_parties():
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
+            "category": party[7],
         }
         for party in result
     ]
@@ -134,8 +145,11 @@ def search_parties(query: str) -> list:
              , parties.entry_fee
              , parties.user_id
              , users.displayname
+             , categories.name
              FROM parties
              LEFT JOIN users ON parties.user_id = users.id
+             LEFT JOIN party_categories ON parties.id = party_categories.party_id
+             JOIN categories ON party_categories.category_id = categories.id
              WHERE title LIKE ? OR description LIKE ?
              ORDER BY start_date ASC"""
     like = f"%{query}%"
@@ -149,6 +163,7 @@ def search_parties(query: str) -> list:
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
+            "category": party[7],
         }
         for party in result
     ]
@@ -184,14 +199,15 @@ def remove_guest(party_id: int, user_id: int) -> None:
 
 def get_categories() -> list:
     sql = """
-    SELECT name FROM categories ORDER BY id
+    SELECT id, name FROM categories ORDER BY id
     """
     result = db.query(sql)
-    return {
-        "id": category[0],
-        "name": category[1]
+    return [{
+            "id": category[0],
+            "name": category[1]
+        }
         for category in result
-    }
+    ]
 
 
 def add_category(party_id: int, category_id: int) -> None:
@@ -205,4 +221,4 @@ def edit_category(party_id: int, new_category_id: int) -> None:
     sql = """
     UPDATE party_categories SET category_id = ? WHERE party_id = ?
     """
-    db.execute(sql, [category_id, party_id])
+    db.execute(sql, [new_category_id, party_id])

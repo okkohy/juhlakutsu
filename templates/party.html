@@ -5,6 +5,9 @@
 {% block content %}
 <div class="party-big">
   <h3>{{ party.title }}</h3>
+  {% if party.category %}
+    <span class="category">{{ party.category }}</span>
+  {% endif %}
   <p> {{ party.description }} </p>
 
   <h4>Järjestäjä</h4>
