@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash
 import secrets
 import src.db as db
 import sqlite3
+import markupsafe
 
 import src.users as users
 import src.party as party
@@ -13,6 +14,13 @@ import src.party as party
 app = Flask(__name__)
 # app.secret_key = secrets.token_hex(16)
 app.secret_key = "18fd24bf6a2ad4dac04a33963db1c42f"
+
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -41,6 +49,14 @@ def login():
             return redirect("/login")
     else:
         abort(make_response("Illegal method"))
+
+
+@app.route("/logout")
+def logout():
+    if "user_id" in session:
+        session.pop("user_id")
+        session.pop("username")
+    return redirect("/")
 
 
 @app.route("/register", methods=["GET", "POST"])

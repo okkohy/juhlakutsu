@@ -203,9 +203,20 @@ def search_parties(query: str) -> list:
 
 def get_guests(party_id: int) -> list:
     sql = """
-    SELECT user_id FROM guests WHERE party_id = ?
+    SELECT
+    guests.user_id
+    , users.displayname
+    FROM guests
+    JOIN users ON guests.user_id = users.id
+    WHERE party_id = ?
     """
-    return db.query(sql, [party_id])
+    result = db.query(sql, [party_id])
+    return [{
+            "id": user[0],
+            "displayname": user[1]
+            }
+        for user in result
+        ]
 
 
 def add_guest(party_id: int, user_id: int) -> None:

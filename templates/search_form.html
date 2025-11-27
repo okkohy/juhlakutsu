@@ -30,7 +30,7 @@
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
     {% if party.category %}
-      <span class="category">{{ party.category }}</span>
+      <span class="category {{ party.category }}">{{ party.category }}</span>
     {% endif %}
     <br />
     <!-- Vieraiden määrä: {{ party.guest_count }} -->

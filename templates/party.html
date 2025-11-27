@@ -6,9 +6,9 @@
 <div class="party-big">
   <h3>{{ party.title }}</h3>
   {% if party.category %}
-    <span class="category">{{ party.category }}</span>
+    <span class="category {{ party.category }}">{{ party.category }}</span>
   {% endif %}
-  <p> {{ party.description }} </p>
+  <p> {{ party.description | show_lines }} </p>
 
   <h4>Järjestäjä</h4>
   <a href="/user/{{ party.organizer_id }}">{{ party.organizer }}</a>
@@ -31,6 +31,14 @@
       <form action="/edit/{{ party.id }}" method="get">
         <button type="submit">Muokkaa</button>
       </form>
+      <h3>Vieraat</h3>
+      <ol>
+        {% for attendee in attendees %}
+        <li>
+          {{ attendee.displayname }}
+        </li>
+        {% endfor %}
+      </ol>
     {% else %}
       {% if is_guest %}
       <form action="/attend/{{ party.id }}" method="post">
