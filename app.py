@@ -84,16 +84,11 @@ def create_party():
         start_date = request.form["start_date"]
         entry_fee = request.form["entry_fee"]
         category_id = request.form["category"]
-        sql = """INSERT INTO parties
-        (title, description, start_date, entry_fee, user_id)
-        VALUES (?, ?, ?, ?, ?)"""
-        db.execute(sql, [title, description, start_date, entry_fee, session["user_id"]])
-
-        sql = """
-        INSERT INTO party_categories(party_id, category_id) VALUES (?,?)
-        """
-        party_id = db.last_insert_id()
-        db.execute(sql, [party_id, ])
+        try:
+            party.create_party(title, description, start_date, entry_fee, category_id)
+        except ValueError as err:
+            flash(str(err))
+            return redirect("/create")
 
         return redirect(f"/party/{db.last_insert_id()}")
     else:
@@ -128,7 +123,7 @@ def edit_party(party_id: int):
         return redirect(f"/party/{party_id}")
     except ValueError as err:
         flash(str(err))
-        return abort(403)
+        return redirect(f"/edit/{party_id}")
 
 
 @app.route("/delete/<int:party_id>", methods=["GET", "POST"])
@@ -185,11 +180,11 @@ def show_party(party_id: int):
         guests is not None
         and current_user_id is not None
         and len(guests) != 0
-        and current_user_id in guests[0]
+        and current_user_id in [guest["id"] for guest in guests]
     )
     if maybe_party is not None:
         return render_template(
-            "party.html", party=maybe_party, is_guest=current_user_is_guest
+            "party.html", party=maybe_party, is_guest=current_user_is_guest, attendees=guests
         )
     else:
         return abort(404)

@@ -1,4 +1,6 @@
 import src.db as db
+from datetime import datetime, timedelta
+from flask import session
 
 
 def get_party(party_id: int) -> dict | None:
@@ -103,7 +105,30 @@ def get_attended(user_id):
     return parties
 
 
+def create_party(title, description, start_date, entry_fee, category_id):
+    start_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
+    entry_fee = int(entry_fee)
 
+    if not 0 < len(title) < 50:
+        raise ValueError("Nimi on liian pitkä tai lyhyt")
+    if not 0 < len(description) < 2000:
+        raise ValueError("Kuvaus on liian pitkä tai lyhyt")
+    if not datetime.today() - timedelta(1) < start_date < datetime.today() + timedelta(365*5):
+        raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
+    if not 0 < entry_fee < 1000:
+        raise ValueError("Sisäänpääsymaksu ei ole kelpoinen")
+
+    sql = """INSERT INTO parties
+    (title, description, start_date, entry_fee, user_id)
+    VALUES (?, ?, ?, ?, ?)"""
+    db.execute(sql, [title, description, start_date, entry_fee, session["user_id"]])
+
+    if category_id:
+        sql = """
+        INSERT INTO party_categories(party_id, category_id) VALUES (?,?)
+        """
+        party_id = db.last_insert_id()
+        db.execute(sql, [party_id, int(category_id)])
 
 def delete_party(party_id):
     sql = """
@@ -114,10 +139,16 @@ def delete_party(party_id):
 
 def edit_party(party_id, new_title, new_description, new_start_date, new_entry_fee):
     # Data validation
-    if len(new_title) > 50:
-        raise ValueError("Nimi on liian pitkä")
-    if len(new_description) > 2000:
-        raise ValueError("Kuvaus on liian pitkä")
+    new_start_date = datetime.strptime(new_start_date, "%Y-%m-%dT%H:%M")
+    new_entry_fee = int(new_entry_fee)
+    if not 0 < len(new_title) < 50:
+        raise ValueError("Nimi on liian pitkä tai lyhyt")
+    if not 0 < len(new_description) < 2000:
+        raise ValueError("Kuvaus on liian pitkä tai lyhyt")
+    if not datetime.today() - timedelta(1) < new_start_date < datetime.today() + timedelta(365*5):
+        raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
+    if not 0 < new_entry_fee < 1000:
+        raise ValueError("Sisäänpääsymaksu ei ole kelpoinen: {}")
     # Now everything should be ok
     sql = """
     UPDATE parties SET
