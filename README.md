@@ -10,9 +10,10 @@ Kurssille tietokannat ja web-ohjelmointi
 - [x] Käyttäjä näkee listan juhlista. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien juhlat.
 - [x] Käyttäjä pystyy hakemaan juhlia hakusanalla. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä tietokohteita.
 - [x] Käyttäjä pystyy ilmottautumaan ja perumaan ilmottautumisen juhliin.
-- [ ] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät juhlat.
-- [ ] Käyttäjä pystyy valitsemaan juhlille yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
-- [ ] Sovelluksessa on pääasiallisen juhlien lisäksi toissijainen tietokohde, joka juhlia. Käyttäjä pystyy lisäämään toissijaisia tietokohteita omiin ja muiden käyttäjien juhliin.
+- [x] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät juhlat.
+- [x] Käyttäjä pystyy valitsemaan juhlille yhden tai useamman luokittelun. Luokat ovat tietokannassa.
+- [x] Sovelluksessa on pääasiallisen juhlien lisäksi toissijainen tietokohde ilmottautuminen, joka täydentää juhlaa.
+
 
 ## Sovelluksen asentaminen
 
@@ -37,6 +38,7 @@ source .venv/bin/activate
 pip3 install -U flask
 
 sqlite3 database.db < schema.sql
+sqlite3 database.db < init.sql
 
 flask --app src/main run
 ```
