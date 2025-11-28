@@ -3,6 +3,7 @@
 {% block title %}Muokkaa juhlaa {{ party.title }}{% endblock %}
 
 {% block content %}
+<div class="form edit">
 <form action="/edit/{{ party.id }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   <label for="title">Juhlien nimi</label> </br >
@@ -50,10 +51,12 @@
       placeholder="Hinta (&euro;)"
       value="{{ party.entry_fee }}"
       >
+  <br>
   <button type="submit">Päivitä</button>
+  <p class="actions">
+    <a href="/party/{{ party.id }}" class="cancel">Peruuta</a>
+    <a href="/delete/{{ party.id }}" class="delete">Poista</a>
+  </p>
 </form>
-<p>
-  <a href="/party/{{ party.id }}" class="cancel">Peruuta</a>
-  <a href="/delete/{{ party.id }}" class="delete">Poista</a>
-</p>
+</div>
 {% endblock %}

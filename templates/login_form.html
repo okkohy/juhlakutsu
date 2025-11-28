@@ -3,7 +3,7 @@
 {% block title %}Kirjaudu sisään{% endblock %}
 
 {% block content %}
-<form action="/login", method="post">
+<form action="/login" method="post" class="form">
   <p>Käyttäjätunnus</p>
   <input
       type="text"
@@ -14,6 +14,7 @@
       type="password"
       name="password"
       placeholder="Salasana">
+  <br>
   <button type="submit">Kirjaudu</button>
 </form>
 {% endblock %}

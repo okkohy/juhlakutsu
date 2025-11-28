@@ -3,6 +3,8 @@
 {% block title %}Etsi juhlia{% endblock %}
 
 {% block content %}
+
+<div class="form search">
 <h2>Etsi juhlia</h2>
 
 <form action="/search" method="get">
@@ -37,5 +39,6 @@
   </div>
   {% endfor %}
 </ul>
+</div>
 {% endif %}
 {% endblock %}

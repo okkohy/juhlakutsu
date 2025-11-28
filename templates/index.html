@@ -3,6 +3,7 @@
 {% block title %}Juhlakutsut{% endblock %}
 
 {% block content %}
+<div class="main">
 <h2>Juhlakutsut</h2>
 
 <ul class="parties">
@@ -15,7 +16,7 @@
     {% if party.entry_fee %}
       <span class="fee">{{ party.entry_fee }} &euro;</span>
     {%else%}
-      <span>Ilmanen</span>
+      <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
     {% if party.category %}
@@ -26,4 +27,5 @@
   </div>
   {% endfor %}
 </ul>
+</div>
 {% endblock %}

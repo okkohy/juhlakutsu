@@ -8,7 +8,7 @@
 <p>Haluatko varmasti poistaa juhlan?</p>
 <form action="/delete/{{ party.id }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-  <button type="submit" name="remove">Poista</button>
+  <button type="submit" name="remove" class="delete">Poista</button>
   <button type="submit" name="back">Palaa takaisin</button>
 </form>
 <p>

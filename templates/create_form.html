@@ -3,6 +3,7 @@
 {% block title %}Luo juhlakutsu{% endblock %}
 
 {% block content %}
+<div class="form create">
 <form action="/create" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   </br >
@@ -19,7 +20,7 @@
   <textarea
       id="description"
       rows="8"
-      cols="60"
+      cols="40"
       name="description"
       placeholder="Kuvaus"
       maxlength="2000"
@@ -48,6 +49,8 @@
       name="entry_fee"
       placeholder="Hinta (&euro;)"
       >
+  <br>
   <button type="submit">Luo</button>
 </form>
+</div>
 {% endblock %}

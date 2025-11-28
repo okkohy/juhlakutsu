@@ -1,19 +1,137 @@
+* {
+  background-color: lightgrey;
+}
+
+header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  border-bottom: 2px solid black;
+  width: 100vw;
+}
+nav {
+  width: 50vw;
+  margin: auto;
+  line-height: 2em;
+  font-size: 18px;
+}
+
+.main {
+  margin-top: 74px;
+}
 
 h1, h2 {
-  color: red;
+  max-width: 50vw;
+  margin: 16px auto;
   text-decoration: underline;
+}
+
+p.text {
+  margin: 8px auto;
+  max-width: 50vw;
 }
 
 .parties {
   display: grid;
-  grid-auto-flow: column;
+  padding-left: 0px;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 10px;
-  margin-left: 20vw;
-  margin-right: 20vw;
+  margin: auto;
+  max-width: 50vw;
 }
 
 .party {
-
   max-width: 310px;
-  border: 1px solid #000;
+  border: 3px dashed gray;
+  padding: 10px;
+}
+
+.party:hover {
+  border-style: solid;
+}
+
+.category, span.fee {
+  background-color: lightcoral;
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+span.free {
+  background-color: #86e27e;
+  border-radius: 5px;
+  padding: 1px 5px;
+
+}
+
+button, .delete, .cancel {
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 10px;
+  font-weight: bold;
+  border-width: 3px;
+  border-style: dashed;
+}
+
+button:hover, .delete:hover, .cancel:hover {
+  border-style: solid;
+  cursor: pointer;
+}
+
+.actions {
+  display: inline;
+}
+
+.delete {
+  border-color: red;
+}
+
+input, select, textarea {
+  border-style: dashed;
+  border-width: 3px;
+  margin-bottom: 20px;
+  margin-top: 6px;
+}
+textarea:focus-visible, input:focus-visible, select:focus {
+  outline: none;
+  border-style: solid;
+}
+
+input {
+  height: 25px;
+  line-height: 14px;
+}
+
+select {
+  height: 32px;
+}
+
+textarea {
+  width: max(190px, min(70vw, 340px));
+}
+
+dialog {
+  border-color: gray;
+}
+
+.form, .party-big {
+  max-width: max(45vw, 250px);
+  margin: auto;
+  margin-top: 74px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .parties {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media only screen and (max-width: 600px) {
+  body {
+    margin: 0px;
+  }
+  header {
+    position: relative;
+  }
+  .parties {
+    grid-template-columns: 1fr;
+  }
 }

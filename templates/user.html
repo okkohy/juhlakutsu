@@ -3,8 +3,9 @@
 {% block title %}{{ user.displayname }}{% endblock %}
 
 {% block content %}
+<div class="main">
 <h2>Käyttäjän {{ user.displayname }} järjestämät juhlat</h2>
-<p>Yhteensä {{ party_count }}</p>
+<p class="text">Yhteensä {{ party_count }}</p>
 <ul class="parties">
   {% for party in parties %}
   <div class="party">
@@ -13,16 +14,18 @@
     {% if party.entry_fee %}
       <span class="fee">{{ party.entry_fee }} &euro;</span>
     {%else%}
-      <span>Ilmanen</span>
+      <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
     <br />
-    <!-- Vieraiden määrä: {{ party.guest_count }} -->
+    <!-- {% if party.guest_count %} -->
+    <!--   Vieraiden määrä: {{ party.guest_count }} -->
+    <!-- {% endif %} -->
   </div>
   {% endfor %}
 </ul>
 <h2>Käyttäjän {{ user.displayname }} vierallut juhlat</h2>
-<p>Yhteensä {{ attend_count }}</p>
+<p class="text">Yhteensä {{ attend_count }}</p>
 <ul class="parties">
   {% for party in attended %}
   <div class="party">
@@ -31,12 +34,15 @@
     {% if party.entry_fee %}
       <span class="fee">{{ party.entry_fee }} &euro;</span>
     {%else%}
-      <span>Ilmanen</span>
+      <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
     <br />
-    <!-- Vieraiden määrä: {{ party.guest_count }} -->
+    <!-- {% if party.guest_count %} -->
+    <!--   Vieraiden määrä: {{ party.guest_count }} -->
+    <!-- {% endif %} -->
   </div>
   {% endfor %}
 </ul>
+</div>
 {% endblock %}
