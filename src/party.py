@@ -114,7 +114,11 @@ def create_party(title, description, start_date, entry_fee, category_id):
         raise ValueError("Nimi on liian pitkä tai lyhyt")
     if not 0 < len(description) < 2000:
         raise ValueError("Kuvaus on liian pitkä tai lyhyt")
-    if not datetime.today() - timedelta(1) < start_date < datetime.today() + timedelta(365*5):
+    if (
+        not datetime.today() - timedelta(1)
+        < start_date
+        < datetime.today() + timedelta(365 * 5)
+    ):
         raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
     if entry_fee:
         if not 0 < entry_fee < 1000:
@@ -131,6 +135,7 @@ def create_party(title, description, start_date, entry_fee, category_id):
         """
         party_id = db.last_insert_id()
         db.execute(sql, [party_id, int(category_id)])
+
 
 def delete_party(party_id):
     sql = """
@@ -149,7 +154,11 @@ def edit_party(party_id, new_title, new_description, new_start_date, new_entry_f
         raise ValueError("Nimi on liian pitkä tai lyhyt")
     if not 0 < len(new_description) < 2000:
         raise ValueError("Kuvaus on liian pitkä tai lyhyt")
-    if not datetime.today() - timedelta(1) < new_start_date < datetime.today() + timedelta(365*5):
+    if (
+        not datetime.today() - timedelta(1)
+        < new_start_date
+        < datetime.today() + timedelta(365 * 5)
+    ):
         raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
     if new_entry_fee:
         if not 0 < new_entry_fee < 1000:
@@ -217,12 +226,7 @@ def get_guests(party_id: int) -> list:
     WHERE party_id = ?
     """
     result = db.query(sql, [party_id])
-    return [{
-            "id": user[0],
-            "displayname": user[1]
-            }
-        for user in result
-        ]
+    return [{"id": user[0], "displayname": user[1]} for user in result]
 
 
 def add_guest(party_id: int, user_id: int) -> None:
@@ -250,12 +254,7 @@ def get_categories() -> list:
     SELECT id, name FROM categories ORDER BY id
     """
     result = db.query(sql)
-    return [{
-            "id": category[0],
-            "name": category[1]
-        }
-        for category in result
-    ]
+    return [{"id": category[0], "name": category[1]} for category in result]
 
 
 def add_category(party_id: int, category_id: int) -> None:

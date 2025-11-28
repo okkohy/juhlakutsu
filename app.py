@@ -121,11 +121,11 @@ def edit_party(party_id: int):
     if maybe_party["organizer_id"] != session["user_id"]:
         abort(403)
     # Filter out the category that is currently selected
-    categories = [
-            cat for cat in categories if cat["id"] != maybe_party["category_id"]
-            ]
+    categories = [cat for cat in categories if cat["id"] != maybe_party["category_id"]]
     if request.method == "GET":
-        return render_template("edit_form.html", party=maybe_party, categories=categories)
+        return render_template(
+            "edit_form.html", party=maybe_party, categories=categories
+        )
     # elif method == "POST":
     users.check_csrf()
     title = request.form["title"]
@@ -200,7 +200,10 @@ def show_party(party_id: int):
     )
     if maybe_party is not None:
         return render_template(
-            "party.html", party=maybe_party, is_guest=current_user_is_guest, attendees=guests
+            "party.html",
+            party=maybe_party,
+            is_guest=current_user_is_guest,
+            attendees=guests,
         )
     else:
         return abort(404)
@@ -219,11 +222,15 @@ def show_user(user_id: int):
 
     if maybe_user is not None:
         return render_template(
-            "user.html", user=maybe_user, parties=parties, attended=attended_parties, party_count=party_count, attend_count=attend_count
+            "user.html",
+            user=maybe_user,
+            parties=parties,
+            attended=attended_parties,
+            party_count=party_count,
+            attend_count=attend_count,
         )
     else:
         return abort(404)
-
 
 
 @app.route("/search/")

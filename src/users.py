@@ -2,6 +2,7 @@ from werkzeug.security import check_password_hash
 from flask import session, request, abort
 import src.db as db
 
+
 def get_user(user_id: int) -> dict | None:
     sql = """
     SELECT username, displayname
