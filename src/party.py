@@ -107,7 +107,8 @@ def get_attended(user_id):
 
 def create_party(title, description, start_date, entry_fee, category_id):
     start_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
-    entry_fee = int(entry_fee)
+    if entry_fee:
+        entry_fee = int(entry_fee)
 
     if not 0 < len(title) < 50:
         raise ValueError("Nimi on liian pitkä tai lyhyt")
@@ -115,8 +116,9 @@ def create_party(title, description, start_date, entry_fee, category_id):
         raise ValueError("Kuvaus on liian pitkä tai lyhyt")
     if not datetime.today() - timedelta(1) < start_date < datetime.today() + timedelta(365*5):
         raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
-    if not 0 < entry_fee < 1000:
-        raise ValueError("Sisäänpääsymaksu ei ole kelpoinen")
+    if entry_fee:
+        if not 0 < entry_fee < 1000:
+            raise ValueError("Sisäänpääsymaksu ei ole kelpoinen")
 
     sql = """INSERT INTO parties
     (title, description, start_date, entry_fee, user_id)
@@ -140,15 +142,19 @@ def delete_party(party_id):
 def edit_party(party_id, new_title, new_description, new_start_date, new_entry_fee):
     # Data validation
     new_start_date = datetime.strptime(new_start_date, "%Y-%m-%dT%H:%M")
-    new_entry_fee = int(new_entry_fee)
+    if new_entry_fee:
+        new_entry_fee = int(new_entry_fee)
+
     if not 0 < len(new_title) < 50:
         raise ValueError("Nimi on liian pitkä tai lyhyt")
     if not 0 < len(new_description) < 2000:
         raise ValueError("Kuvaus on liian pitkä tai lyhyt")
     if not datetime.today() - timedelta(1) < new_start_date < datetime.today() + timedelta(365*5):
         raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
-    if not 0 < new_entry_fee < 1000:
-        raise ValueError("Sisäänpääsymaksu ei ole kelpoinen: {}")
+    if new_entry_fee:
+        if not 0 < new_entry_fee < 1000:
+            raise ValueError("Sisäänpääsymaksu ei ole kelpoinen: {}")
+
     # Now everything should be ok
     sql = """
     UPDATE parties SET
