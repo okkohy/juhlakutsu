@@ -2,7 +2,6 @@ from flask import Flask
 from flask import redirect, render_template, request, flash, make_response
 from flask import session
 from flask.helpers import abort
-from werkzeug.security import generate_password_hash
 import secrets
 import src.db as db
 import sqlite3
@@ -69,15 +68,14 @@ def register():
         displayname = request.form["displayname"]
         password1 = request.form["password"]
         password2 = request.form["password2"]
-        if password1 != password2:
-            return "VIRHE: salasanat eivät ole samat"
-        password_hash = generate_password_hash(password1)
 
         try:
-            sql = "INSERT INTO users (username, displayname, password_hash) VALUES (?, ?, ?)"
-            db.execute(sql, [username, displayname, password_hash])
+            users.create_user(username, displayname, password1, password2)
         except sqlite3.IntegrityError:
             flash("VIRHE: tunnus on jo varattu")
+            return redirect("/register")
+        except ValueError as er:
+            flash(str(er))
             return redirect("/register")
 
         flash("Tunnus luotu")

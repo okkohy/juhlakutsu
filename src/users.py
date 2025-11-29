@@ -1,6 +1,7 @@
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session, request, abort
 import src.db as db
+import src.party as fest
 
 
 def get_user(user_id: int) -> dict | None:
@@ -14,6 +15,21 @@ def get_user(user_id: int) -> dict | None:
             "username": result[0][0],
             "displayname": result[0][1],
         }
+
+
+def create_user(username, displayname, password1, password2):
+    if password1 != password2:
+        return ValueError("VIRHE: salasanat eivät ole samat")
+    if not 0 < len(username) <= 30:
+        return ValueError("Käyttäjätunnuksen täytyy olla 1-30 merkkiä")
+    if not 0 < len(displayname) <= 30:
+        return ValueError("Kutsumanimen täytyy olla 1-30 merkkiä")
+    if not 10 <= len(password1) <= 200:
+        return ValueError("Salasanan täytyy olla 10-200 merkkiä")
+
+    password_hash = generate_password_hash(password1)
+    sql = "INSERT INTO users (username, displayname, password_hash) VALUES (?, ?, ?)"
+    db.execute(sql, [username, displayname, password_hash])
 
 
 def get_parties(user_id):

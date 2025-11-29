@@ -4,27 +4,42 @@
 
 {% block content %}
 <form action="/register" method="post" class="form">
-  <p>Käyttäjätunnus</p>
+  <p>
+  <label for="username">Käyttäjätunnus</label>
+  <br>
   <input
       type="text"
       name="username"
-      placeholder="Käyttäjänimi">
-  <p>Kutsumanimi</p>
+      placeholder="Käyttäjänimi"
+      required>
+  </p>
+  <p>
+  <label for="displayname">Kutsumanimi</label>
+  <br>
   <input
       type="text"
       name="displayname"
-      placeholder="Kutsumanimi">
-  <p>Salasana</p>
+      placeholder="Kutsumanimi"
+      required>
+  </p>
+  <p>
+  <label for="password">Salasana</label>
+  <br>
   <input
       type="password"
       name="password"
-      placeholder="Salasana">
-  <p>Salasana uudestaan</p>
+      placeholder="Salasana"
+      required>
+  </p>
+  <p>
+  <label for="password2">Salasana uudestaan</label>
+  <br>
   <input
       type="password"
       name="password2"
-      placeholder="Salasana">
-  <br>
+      placeholder="Salasana"
+      required>
+  </p>
   <button type="submit">Luo tili</button>
 </form>
 {% endblock %}
