@@ -17,7 +17,9 @@ nav {
 }
 
 .main {
+  margin: auto;
   margin-top: 74px;
+  max-width: 50vw;
 }
 
 h1, h2 {
@@ -26,7 +28,7 @@ h1, h2 {
   text-decoration: underline;
 }
 
-p.text {
+p {
   margin: 8px auto;
   max-width: 50vw;
 }
@@ -70,6 +72,7 @@ button, .delete, .cancel {
   font-weight: bold;
   border-width: 3px;
   border-style: dashed;
+  border-color: grey;
 }
 
 button:hover, .delete:hover, .cancel:hover {

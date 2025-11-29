@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ user.displayname }}{% endblock %}
+{% block title %}Käyttäjä {{ user.displayname }}{% endblock %}
 
 {% block content %}
 <div class="main">
@@ -10,14 +10,14 @@
   {% for party in parties %}
   <div class="party">
     <a href="/party/{{ party.id }}">{{ party.title }}</a>
-    <br />
+    <br>
     {% if party.entry_fee %}
       <span class="fee">{{ party.entry_fee }} &euro;</span>
-    {%else%}
+    {% else %}
       <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
-    <br />
+    <br>
     <!-- {% if party.guest_count %} -->
     <!--   Vieraiden määrä: {{ party.guest_count }} -->
     <!-- {% endif %} -->
@@ -30,14 +30,14 @@
   {% for party in attended %}
   <div class="party">
     <a href="/party/{{ party.id }}">{{ party.title }}</a>
-    <br />
+    <br>
     {% if party.entry_fee %}
       <span class="fee">{{ party.entry_fee }} &euro;</span>
     {%else%}
       <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
-    <br />
+    <br>
     <!-- {% if party.guest_count %} -->
     <!--   Vieraiden määrä: {{ party.guest_count }} -->
     <!-- {% endif %} -->

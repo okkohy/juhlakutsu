@@ -6,7 +6,7 @@
 <div class="form edit">
 <form action="/edit/{{ party.id }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  <label for="title">Juhlien nimi</label> </br >
+  <label for="title">Juhlien nimi</label> <br>
   <input
       type="text"
       id="title"
@@ -15,8 +15,8 @@
       maxlength="50"
       value="{{ party.title }}"
       required>
-  </br >
-  <label for="description">Kuvaus</label> </br >
+  <br>
+  <label for="description">Kuvaus</label> <br>
   <textarea
       id="description"
       rows="8"
@@ -25,8 +25,8 @@
       placeholder="Kuvaus"
       maxlength="2000"
       required>{{ party.description }}</textarea>
-  </br >
-  <label for="start_date">Alkamis ajankohta</label> </br >
+  <br>
+  <label for="start_date">Alkamis ajankohta</label> <br>
   <input
       type="datetime-local"
       id="start_date"
@@ -34,16 +34,16 @@
       placeholder="Valitse"
       value="{{ party.start_date }}"
       required>
-  </br >
-  <label for="category">Valitse kategoria</label> </br >
+  <br>
+  <label for="category">Valitse kategoria</label> <br>
   <select name="category">
     <option value="{{ party.category_id }}">{{ party.category }}</option>
     {% for category in categories %}
     <option value="{{category.id}}">{{category.name}}</option>
     {% endfor %}
   </select>
-  </br >
-  <label for="entry_fee">Sisäänpääsymaksu</label> </br >
+  <br>
+  <label for="entry_fee">Sisäänpääsymaksu</label> <br>
   <input
       type="number"
       id="entry_fee"

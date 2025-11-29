@@ -3,6 +3,7 @@
 {% block title %}Poista juhla{% endblock %}
 
 {% block content %}
+<div class="main">
 <h2>{{ party.title }}</h2>
 <h3>Poista juhla</h3>
 <p>Haluatko varmasti poistaa juhlan?</p>
@@ -10,8 +11,9 @@
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <button type="submit" name="remove" class="delete">Poista</button>
   <button type="submit" name="back">Palaa takaisin</button>
+  <p class="actions">
+    <a href="/party/{{ party.id }}" class="cancel">Takaisin ilmoitukseen</a>
+  </p>
 </form>
-<p>
-  <a href="/party/{{ party.id }}">Takaisin ilmoitukseen</a>
-</p>
+</div>
 {% endblock %}

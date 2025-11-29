@@ -25,10 +25,13 @@
   {% else %}
     <p>Ilmainen</p>
   {% endif %}
+  <p class="actions">
+    <a href="/" class="cancel">Takaisin</a>
+  </p>
 
   {% if session.user_id %}
     {% if session.user_id == party.organizer_id %}
-      <form action="/edit/{{ party.id }}" method="get">
+      <form action="/edit/{{ party.id }}" method="get" class="actions">
         <button type="submit">Muokkaa</button>
       </form>
       <h3>Vieraat</h3>
@@ -41,7 +44,7 @@
       </ol>
     {% else %}
       {% if is_guest %}
-      <form action="/attend/{{ party.id }}" method="post">
+      <form action="/attend/{{ party.id }}" method="post" class="actions">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <button type="submit" name="cancel">Peru ilmottautuminen</button>
       </form>

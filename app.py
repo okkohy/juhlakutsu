@@ -18,7 +18,7 @@ app.secret_key = "18fd24bf6a2ad4dac04a33963db1c42f"
 @app.template_filter()
 def show_lines(content):
     content = str(markupsafe.escape(content))
-    content = content.replace("\n", "<br />")
+    content = content.replace("\n", "<br>")
     return markupsafe.Markup(content)
 
 

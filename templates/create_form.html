@@ -6,8 +6,8 @@
 <div class="form create">
 <form action="/create" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  </br >
-  <label for="title">Juhlien nimi</label> </br >
+  <br>
+  <label for="title">Juhlien nimi</label> <br>
   <input
       type="text"
       id="title"
@@ -15,8 +15,8 @@
       placeholder="Juhlien nimi"
       maxlength="50"
       required>
-  </br >
-  <label for="description">Kuvaus</label> </br >
+  <br>
+  <label for="description">Kuvaus</label> <br>
   <textarea
       id="description"
       rows="8"
@@ -25,24 +25,24 @@
       placeholder="Kuvaus"
       maxlength="2000"
       required></textarea>
-  </br >
-  <label for="start_date">Alkamis ajankohta</label> </br >
+  <br>
+  <label for="start_date">Alkamis ajankohta</label> <br>
   <input
       type="datetime-local"
       id="start_date"
       name="start_date"
       placeholder="Valitse"
       required>
-  </br >
-  <label for="category">Valitse kategoria</label> </br >
+  <br>
+  <label for="category">Valitse kategoria</label> <br>
   <select name="category">
     <option value="">valitse</option>
     {% for category in categories %}
     <option value="{{category.id}}">{{category.name}}</option>
     {% endfor %}
   </select>
-  </br >
-  <label for="entry_fee">Sisäänpääsymaksu</label> </br >
+  <br>
+  <label for="entry_fee">Sisäänpääsymaksu</label> <br>
   <input
       type="number"
       id="entry_fee"
@@ -51,6 +51,9 @@
       >
   <br>
   <button type="submit">Luo</button>
+  <p class="actions">
+    <a href="/" class="cancel">Takaisin</a>
+  </p>
 </form>
 </div>
 {% endblock %}

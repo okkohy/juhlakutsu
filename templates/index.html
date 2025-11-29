@@ -10,9 +10,9 @@
   {% for party in parties %}
   <div class="party">
     <a href="/party/{{ party.id }}">{{ party.title }}</a>
-    <br />
+    <br>
     Järjestäjä: <a href="/user/{{ party.organizer_id }}">{{ party.organizer_displayname }}</a>
-    <br />
+    <br>
     {% if party.entry_fee %}
       <span class="fee">{{ party.entry_fee }} &euro;</span>
     {%else%}
@@ -22,7 +22,7 @@
     {% if party.category %}
       <span class="category {{ party.category }}">{{ party.category }}</span>
     {% endif %}
-    <br />
+    <br>
     <!-- Vieraiden määrä: {{ party.guest_count }} -->
   </div>
   {% endfor %}
