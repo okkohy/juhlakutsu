@@ -19,13 +19,13 @@ def get_user(user_id: int) -> dict | None:
 
 def create_user(username, displayname, password1, password2):
     if password1 != password2:
-        return ValueError("VIRHE: salasanat eivät ole samat")
+        raise ValueError("VIRHE: salasanat eivät ole samat")
     if not 0 < len(username) <= 30:
-        return ValueError("Käyttäjätunnuksen täytyy olla 1-30 merkkiä")
+        raise ValueError("Käyttäjätunnuksen täytyy olla 1-30 merkkiä")
     if not 0 < len(displayname) <= 30:
-        return ValueError("Kutsumanimen täytyy olla 1-30 merkkiä")
+        raise ValueError("Kutsumanimen täytyy olla 1-30 merkkiä")
     if not 10 <= len(password1) <= 200:
-        return ValueError("Salasanan täytyy olla 10-200 merkkiä")
+        raise ValueError("Salasanan täytyy olla 10-200 merkkiä")
 
     password_hash = generate_password_hash(password1)
     sql = "INSERT INTO users (username, displayname, password_hash) VALUES (?, ?, ?)"
