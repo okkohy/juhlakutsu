@@ -163,7 +163,7 @@ def delete_party(party_id: int):
         flash("Juhla poistettu")
         return redirect("/")
     else:
-        return redirect(f"/party/{party_id}")
+        return redirect(f"/edit/{party_id}")
 
 
 @app.route("/attend/<int:party_id>", methods=["POST"])
@@ -199,6 +199,8 @@ def show_party(party_id: int):
         and current_user_id in [guest["id"] for guest in guests]
     )
     if maybe_party is not None:
+        start_date = maybe_party["start_date"]
+        maybe_party["start_date"] = party.format_start_date(start_date, False)
         return render_template(
             "party.html",
             party=maybe_party,
@@ -220,6 +222,13 @@ def show_user(user_id: int):
     party_count = len(parties)
     attend_count = len(attended_parties)
 
+    for p in parties:
+        start_date = p["start_date"]
+        p["start_date"] = party.format_start_date(start_date, True)
+    for a in attended_parties:
+        start_date = a["start_date"]
+        a["start_date"] = party.format_start_date(start_date, True)
+
     if maybe_user is not None:
         return render_template(
             "user.html",
@@ -238,6 +247,9 @@ def search():
     query = request.args.get("query")
     if query is not None:
         parties = party.search_parties(query)
+        for p in parties:
+            start_date = p["start_date"]
+            p["start_date"] = party.format_start_date(start_date, True)
         return render_template("search_form.html", query=query, parties=parties)
     else:
         return render_template("search_form.html")
@@ -246,4 +258,7 @@ def search():
 @app.route("/")
 def index():
     parties = party.get_parties()
+    for p in parties:
+        start_date = p["start_date"]
+        p["start_date"] = party.format_start_date(start_date, True)
     return render_template("index.html", parties=parties)

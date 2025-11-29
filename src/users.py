@@ -33,7 +33,7 @@ def get_parties(user_id):
             "id": party[0],
             "title": party[1],
             "description": party[2],
-            "start_date": party[3],
+            "start_date": fest.parse_db_date(party[3]),
             "entry_fee": party[4],
             "organizer_id": party[5],
         }

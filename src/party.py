@@ -32,7 +32,7 @@ def get_party(party_id: int) -> dict | None:
         party = {
             "title": party_result[0][0],
             "description": party_result[0][1],
-            "start_date": party_result[0][2],
+            "start_date": parse_db_date(party_result[0][2]),
             "entry_fee": party_result[0][3],
             "organizer": party_result[0][7],
             "id": party_result[0][5],
@@ -65,7 +65,7 @@ def get_parties():
             "id": party[0],
             "title": party[1],
             "description": party[2],
-            "start_date": party[3],
+            "start_date": parse_db_date(party[3]),
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
@@ -95,7 +95,7 @@ def get_attended(user_id):
             "id": party[0],
             "title": party[1],
             "description": party[2],
-            "start_date": party[3],
+            "start_date": parse_db_date(party[3]),
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
@@ -106,7 +106,7 @@ def get_attended(user_id):
 
 
 def create_party(title, description, start_date, entry_fee, category_id):
-    start_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
+    start_date = parse_start_date(start_date)
     if entry_fee:
         entry_fee = int(entry_fee)
 
@@ -146,7 +146,7 @@ def delete_party(party_id):
 
 def edit_party(party_id, new_title, new_description, new_start_date, new_entry_fee):
     # Data validation
-    new_start_date = datetime.strptime(new_start_date, "%Y-%m-%dT%H:%M")
+    new_start_date = parse_start_date(new_start_date)
     if new_entry_fee:
         new_entry_fee = int(new_entry_fee)
 
@@ -205,7 +205,7 @@ def search_parties(query: str) -> list:
             "id": party[0],
             "title": party[1],
             "description": party[2],
-            "start_date": party[3],
+            "start_date": parse_db_date(party[3]),
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
@@ -269,3 +269,20 @@ def edit_category(party_id: int, new_category_id: int) -> None:
     UPDATE party_categories SET category_id = ? WHERE party_id = ?
     """
     db.execute(sql, [new_category_id, party_id])
+
+
+def parse_db_date(start_date: str) -> datetime:
+    return datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
+
+
+def parse_start_date(start_date: str) -> datetime:
+    return datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
+
+
+def format_start_date(start_date: datetime, is_short: bool) -> str:
+    if start_date.year == datetime.today().year and is_short:
+        return start_date.strftime("%d.%m. %H.%M")
+    elif is_short:
+        return start_date.strftime("%d.%m.%Y")
+    else:
+        return start_date.strftime("%d.%m.%Y %H.%M")
