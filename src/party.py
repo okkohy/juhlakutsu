@@ -2,6 +2,16 @@ import src.db as db
 from datetime import datetime, timedelta
 from flask import session
 
+PARTIES_PER_PAGE = 20
+
+
+def party_count():
+    sql = """
+        SELECT COUNT (id)
+        FROM parties
+    """
+    return db.query(sql)[0][0]
+
 
 def get_party(party_id: int) -> dict | None:
     sql = """SELECT
@@ -44,7 +54,7 @@ def get_party(party_id: int) -> dict | None:
         return party
 
 
-def get_parties():
+def get_parties(page: int = 1):
     sql = """
     SELECT parties.id
     , parties.title
@@ -58,8 +68,11 @@ def get_parties():
     LEFT JOIN users ON parties.user_id = users.id
     LEFT JOIN party_categories ON parties.id = party_categories.party_id
     JOIN categories ON party_categories.category_id = categories.id
+    LIMIT ?
+    OFFSET ?
     """
-    result = db.query(sql, [])
+    offset = (page - 1) * PARTIES_PER_PAGE
+    result = db.query(sql, [PARTIES_PER_PAGE, offset])
     parties = [
         {
             "id": party[0],

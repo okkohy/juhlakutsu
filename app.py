@@ -1,11 +1,12 @@
+import math
+import sqlite3
+import secrets
+import markupsafe
 from flask import Flask
 from flask import redirect, render_template, request, flash, make_response
 from flask import session
 from flask.helpers import abort
-import secrets
 import src.db as db
-import sqlite3
-import markupsafe
 
 import src.users as users
 import src.party as party
@@ -254,9 +255,20 @@ def search():
 
 
 @app.route("/")
-def index():
-    parties = party.get_parties()
+@app.route("/<int:page>")
+def index(page: int = 1):
+    if page < 1:
+        return redirect("/")
+
+    party_count = party.party_count()
+    parties = party.get_parties(page)
+    page_count = max(1, math.ceil(party_count / party.PARTIES_PER_PAGE))
+
+    if page_count < page:
+        return redirect(f"/{page_count}")
     for p in parties:
         start_date = p["start_date"]
         p["start_date"] = party.format_start_date(start_date, True)
-    return render_template("index.html", parties=parties)
+    return render_template(
+        "index.html", parties=parties, page=page, page_count=page_count
+    )
