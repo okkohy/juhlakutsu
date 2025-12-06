@@ -7,7 +7,7 @@
 <form action="/create" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   <br>
-  <label for="title">Juhlien nimi</label> <br>
+  <label for="title" class="required" title="Pakollinen kenttä">Juhlien nimi</label> <br>
   <input
       type="text"
       id="title"
@@ -16,7 +16,7 @@
       maxlength="50"
       required>
   <br>
-  <label for="description">Kuvaus</label> <br>
+  <label for="description" class="required" title="Pakollinen kenttä">Kuvaus</label> <br>
   <textarea
       id="description"
       rows="8"
@@ -26,19 +26,21 @@
       maxlength="2000"
       required></textarea>
   <br>
-  <label for="start_date">Alkamis ajankohta</label> <br>
+  <label for="start_date" class="required" title="Pakollinen kenttä">Alkamis ajankohta</label> <br>
   <input
       type="datetime-local"
       id="start_date"
       name="start_date"
       placeholder="Valitse"
+      min="{{ yesterday }}"
+      max="{{ max_date }}"
       required>
   <br>
   <label for="category">Valitse kategoria</label> <br>
   <select name="category">
     <option value="">valitse</option>
     {% for category in categories %}
-    <option value="{{category.id}}">{{category.name}}</option>
+    <option value="{{ category.id }}">{{ category.name }}</option>
     {% endfor %}
   </select>
   <br>

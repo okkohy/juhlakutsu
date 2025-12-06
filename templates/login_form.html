@@ -4,19 +4,25 @@
 
 {% block content %}
 <form action="/login" method="post" class="form">
-  <p>Käyttäjätunnus</p>
+  <p>
+  <label for="username" class="required" title="Pakollinen kenttä">Käyttäjätunnus</label>
+  <br>
   <input
       type="text"
       name="username"
       placeholder="Käyttäjänimi"
       required>
-  <p>Salasana</p>
+  </p>
+  <p>
+  <label for="password" class="required" title="Pakollinen kenttä">Salasana</label>
+  <br>
   <input
       type="password"
       name="password"
       placeholder="Salasana"
       required>
   <br>
+  <p>
   <button type="submit">Kirjaudu</button>
 </form>
 {% endblock %}

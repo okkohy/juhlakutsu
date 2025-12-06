@@ -270,8 +270,6 @@ def get_categories() -> list:
     return [{"id": category[0], "name": category[1]} for category in result]
 
 
-
-
 def set_category(party_id: int, new_category_id: str | None) -> None:
     category_ids = [str(cat["id"]) for cat in get_categories()]
     if new_category_id and new_category_id in category_ids:

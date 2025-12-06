@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import math
 import sqlite3
 import secrets
@@ -89,7 +90,16 @@ def register():
 def create_party():
     if request.method == "GET":
         categories = party.get_categories()
-        return render_template("create_form.html", categories=categories)
+        yesterday = datetime.today().date().strftime("%Y-%m-%dT%H:%M")
+        max_date = (datetime.today().date() + timedelta(365 * 5)).strftime(
+            "%Y-%m-%dT%H:%M"
+        )
+        return render_template(
+            "create_form.html",
+            categories=categories,
+            yesterday=yesterday,
+            max_date=max_date,
+        )
     elif request.method == "POST":
         users.require_login()
         users.check_csrf()
@@ -100,7 +110,9 @@ def create_party():
         entry_fee = request.form["entry_fee"]
         category_id = request.form["category"]
         try:
-            party_id = party.create_party(title, description, start_date, entry_fee, category_id)
+            party_id = party.create_party(
+                title, description, start_date, entry_fee, category_id
+            )
         except ValueError as err:
             flash(str(err))
             return redirect("/create")
@@ -115,15 +127,21 @@ def edit_party(party_id: int):
     users.require_login()
     maybe_party = party.get_party(party_id)
     categories = party.get_categories()
+    yesterday = datetime.today().date().strftime("%Y-%m-%dT%H:%M")
+    max_date = (datetime.today().date() + timedelta(365 * 5)).strftime("%Y-%m-%dT%H:%M")
     if maybe_party is None:
-        abort(404)
+        return abort(404)
     if maybe_party["organizer_id"] != session["user_id"]:
-        abort(403)
+        return abort(403)
     # Filter out the category that is currently selected
     categories = [cat for cat in categories if cat["id"] != maybe_party["category_id"]]
     if request.method == "GET":
         return render_template(
-            "edit_form.html", party=maybe_party, categories=categories
+            "edit_form.html",
+            party=maybe_party,
+            categories=categories,
+            yesterday=yesterday,
+            max_date=max_date,
         )
     # elif method == "POST":
     users.check_csrf()
