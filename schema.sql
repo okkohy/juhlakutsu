@@ -42,7 +42,7 @@ CREATE TABLE categories (
 
 CREATE TABLE party_categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT
-    , party_id INTEGER
+    , party_id INTEGER UNIQUE NOT NULL
     , category_id INTEGER
     , CONSTRAINT fk_party_categories
       FOREIGN KEY (party_id)

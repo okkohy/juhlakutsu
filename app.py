@@ -100,12 +100,12 @@ def create_party():
         entry_fee = request.form["entry_fee"]
         category_id = request.form["category"]
         try:
-            party.create_party(title, description, start_date, entry_fee, category_id)
+            party_id = party.create_party(title, description, start_date, entry_fee, category_id)
         except ValueError as err:
             flash(str(err))
             return redirect("/create")
 
-        return redirect(f"/party/{db.last_insert_id()}")
+        return redirect(f"/party/{party_id}")
     else:
         abort(make_response("Illegal method"))
 
@@ -134,7 +134,7 @@ def edit_party(party_id: int):
     new_category = request.form["category"]
     try:
         party.edit_party(party_id, title, description, start_date, entry_fee)
-        party.edit_category(party_id, int(new_category))
+        party.set_category(party_id, new_category)
         return redirect(f"/party/{party_id}")
     except ValueError as err:
         flash(str(err))

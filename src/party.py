@@ -29,7 +29,7 @@ def get_party(party_id: int) -> dict | None:
             FROM parties JOIN users ON parties.user_id = users.id
             LEFT JOIN guests ON parties.id = guests.party_id
             LEFT JOIN party_categories ON parties.id = party_categories.party_id
-            JOIN categories ON party_categories.category_id = categories.id
+            LEFT JOIN categories ON party_categories.category_id = categories.id
             WHERE parties.id = ?"""
     party_result = db.query(sql, [party_id])
     if party_result is not None and len(party_result) != 0:
@@ -67,7 +67,7 @@ def get_parties(page: int = 1):
     FROM parties
     LEFT JOIN users ON parties.user_id = users.id
     LEFT JOIN party_categories ON parties.id = party_categories.party_id
-    JOIN categories ON party_categories.category_id = categories.id
+    LEFT JOIN categories ON party_categories.category_id = categories.id
     LIMIT ?
     OFFSET ?
     """
@@ -120,7 +120,7 @@ def get_attended(user_id):
 
 def create_party(title, description, start_date, entry_fee, category_id):
     start_date = parse_start_date(start_date)
-    if entry_fee:
+    if entry_fee and len(entry_fee) > 0:
         entry_fee = int(entry_fee)
 
     if not 0 < len(title) < 50:
@@ -142,12 +142,12 @@ def create_party(title, description, start_date, entry_fee, category_id):
     VALUES (?, ?, ?, ?, ?)"""
     db.execute(sql, [title, description, start_date, entry_fee, session["user_id"]])
 
-    if category_id:
-        sql = """
-        INSERT INTO party_categories(party_id, category_id) VALUES (?,?)
-        """
-        party_id = db.last_insert_id()
-        db.execute(sql, [party_id, int(category_id)])
+    party_id = db.last_insert_id()
+    if party_id:
+        set_category(party_id, category_id)
+    else:
+        raise ValueError("Jotain meni pieleen")
+    return party_id
 
 
 def delete_party(party_id):
@@ -160,7 +160,7 @@ def delete_party(party_id):
 def edit_party(party_id, new_title, new_description, new_start_date, new_entry_fee):
     # Data validation
     new_start_date = parse_start_date(new_start_date)
-    if new_entry_fee:
+    if new_entry_fee is not None and len(new_entry_fee) > 0:
         new_entry_fee = int(new_entry_fee)
 
     if not 0 < len(new_title) < 50:
@@ -208,7 +208,7 @@ def search_parties(query: str) -> list:
              FROM parties
              LEFT JOIN users ON parties.user_id = users.id
              LEFT JOIN party_categories ON parties.id = party_categories.party_id
-             JOIN categories ON party_categories.category_id = categories.id
+             LEFT JOIN categories ON party_categories.category_id = categories.id
              WHERE title LIKE ? OR description LIKE ?
              ORDER BY start_date ASC"""
     like = f"%{query}%"
@@ -270,18 +270,19 @@ def get_categories() -> list:
     return [{"id": category[0], "name": category[1]} for category in result]
 
 
-def add_category(party_id: int, category_id: int) -> None:
-    sql = """
-    INSERT INTO party_categories (party_id, category_id) VALUES (?, ?)
-    """
-    db.execute(sql, [party_id, category_id])
 
 
-def edit_category(party_id: int, new_category_id: int) -> None:
+def set_category(party_id: int, new_category_id: str | None) -> None:
+    category_ids = [str(cat["id"]) for cat in get_categories()]
+    if new_category_id and new_category_id in category_ids:
+        category_id = int(new_category_id)
+    else:
+        return
     sql = """
-    UPDATE party_categories SET category_id = ? WHERE party_id = ?
+    INSERT INTO party_categories (party_id, category_id) VALUES(?, ?)
+    ON CONFLICT (party_id) DO UPDATE SET category_id = ?
     """
-    db.execute(sql, [new_category_id, party_id])
+    db.execute(sql, [party_id, category_id, category_id])
 
 
 def parse_db_date(start_date: str) -> datetime:
