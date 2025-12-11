@@ -23,11 +23,11 @@ def create_user(username, displayname, password1, password2):
     if password1 != password2:
         raise ValueError("VIRHE: salasanat eivät ole samat")
     if not 0 < len(username) <= 30:
-        raise ValueError("Käyttäjätunnuksen täytyy olla 1-30 merkkiä")
+        raise ValueError("VIRHE: Käyttäjätunnuksen täytyy olla 1-30 merkkiä")
     if not 0 < len(displayname) <= 30:
-        raise ValueError("Kutsumanimen täytyy olla 1-30 merkkiä")
+        raise ValueError("VIRHE: Kutsumanimen täytyy olla 1-30 merkkiä")
     if not 10 <= len(password1) <= 200:
-        raise ValueError("Salasanan täytyy olla 10-200 merkkiä")
+        raise ValueError("VIRHE: Salasanan täytyy olla 10-200 merkkiä")
 
     password_hash = generate_password_hash(password1)
     sql = "INSERT INTO users (username, displayname, password_hash) VALUES (?, ?, ?)"

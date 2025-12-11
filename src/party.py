@@ -139,18 +139,22 @@ def create_party(title, description, start_date, entry_fee, category_id):
         entry_fee = int(entry_fee)
 
     if not 0 < len(title) < 50:
-        raise ValueError("Nimi on liian pitkä tai lyhyt")
+        raise ValueError(
+            "VIRHE: Nimi on liian pitkä tai lyhyt. (Maksimi on 50 merkkiä)"
+        )
     if not 0 < len(description) < 2000:
-        raise ValueError("Kuvaus on liian pitkä tai lyhyt")
+        raise ValueError(
+            "VIRHE: Kuvaus on liian pitkä tai lyhyt. (Maksimi on 2000 merkkiä)"
+        )
     if (
         not datetime.today() - timedelta(1)
         < start_date
         < datetime.today() + timedelta(365 * 5)
     ):
-        raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
+        raise ValueError("VIRHE: Valittu päivämäärä on liian kaukana nykyhetkestä.")
     if entry_fee:
         if not 0 < entry_fee < 1000:
-            raise ValueError("Sisäänpääsymaksu ei ole kelpoinen")
+            raise ValueError(f"VIRHE: Sisäänpääsymaksu ei ole kelpoinen {entry_fee}")
 
     sql = """INSERT INTO parties
     (title, description, start_date, entry_fee, user_id)
@@ -161,7 +165,7 @@ def create_party(title, description, start_date, entry_fee, category_id):
     if party_id:
         set_category(party_id, category_id)
     else:
-        raise ValueError("Jotain meni pieleen")
+        raise ValueError("VIRHE: Jotain meni pieleen")
     return party_id
 
 
@@ -179,18 +183,24 @@ def edit_party(party_id, new_title, new_description, new_start_date, new_entry_f
         new_entry_fee = int(new_entry_fee)
 
     if not 0 < len(new_title) < 50:
-        raise ValueError("Nimi on liian pitkä tai lyhyt")
+        raise ValueError(
+            "VIRHE: Nimi on liian pitkä tai lyhyt. (Maksimi on 50 merkkiä)"
+        )
     if not 0 < len(new_description) < 2000:
-        raise ValueError("Kuvaus on liian pitkä tai lyhyt")
+        raise ValueError(
+            "VIRHE: Kuvaus on liian pitkä tai lyhyt. (Maksimi on 2000 merkkiä)"
+        )
     if (
         not datetime.today() - timedelta(1)
         < new_start_date
         < datetime.today() + timedelta(365 * 5)
     ):
-        raise ValueError("Valittu päivämäärä on liian kaukana nykyhetkestä")
+        raise ValueError("VIRHE: Valittu päivämäärä on liian kaukana nykyhetkestä")
     if new_entry_fee:
         if not 0 < new_entry_fee < 1000:
-            raise ValueError("Sisäänpääsymaksu ei ole kelpoinen: {}")
+            raise ValueError(
+                f"VIRHE: Sisäänpääsymaksu ei ole kelpoinen: {new_entry_fee}"
+            )
 
     # Now everything should be ok
     sql = """
