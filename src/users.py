@@ -42,8 +42,11 @@ def get_parties(user_id):
     , parties.start_date
     , parties.entry_fee
     , parties.user_id
+    , COUNT (guests.id) as guest_count
     FROM parties
+    LEFT JOIN guests ON parties.id = guests.party_id
     WHERE parties.user_id = ?
+    GROUP BY parties.id
     """
     result = db.query(sql, [user_id])
     parties = [
@@ -54,6 +57,7 @@ def get_parties(user_id):
             "start_date": fest.parse_db_date(party[3]),
             "entry_fee": party[4],
             "organizer_id": party[5],
+            "guest_count": party[6],
         }
         for party in result
     ]

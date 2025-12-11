@@ -93,6 +93,7 @@ button:hover, .delete:hover, .cancel:hover {
 
 .actions {
   display: inline;
+  margin-top: 16px;
 }
 
 .delete {

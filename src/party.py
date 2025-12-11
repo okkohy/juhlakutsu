@@ -52,6 +52,8 @@ def get_party(party_id: int) -> dict | None:
             "category_id": party_result[0][10],
         }
         return party
+    else:
+        return None
 
 
 def get_parties(page: int = 1):
@@ -64,10 +66,13 @@ def get_parties(page: int = 1):
     , parties.user_id
     , users.displayname
     , categories.name
+    , COUNT (guests.id) guest_count
     FROM parties
     LEFT JOIN users ON parties.user_id = users.id
     LEFT JOIN party_categories ON parties.id = party_categories.party_id
     LEFT JOIN categories ON party_categories.category_id = categories.id
+    LEFT JOIN guests ON parties.id = guests.party_id
+    GROUP BY parties.id
     LIMIT ?
     OFFSET ?
     """
@@ -83,6 +88,7 @@ def get_parties(page: int = 1):
             "organizer_id": party[5],
             "organizer_displayname": party[6],
             "category": party[7],
+            "guest_count": party[8],
         }
         for party in result
     ]
@@ -98,10 +104,13 @@ def get_attended(user_id):
     , parties.entry_fee
     , parties.user_id
     , users.displayname
-    FROM guests
-    LEFT JOIN parties ON parties.id = guests.party_id
-    LEFT JOIN users ON parties.user_id = users.id
-    WHERE guests.user_id = ?
+    , COUNT (guests.id)
+    FROM guests all_guests
+    JOIN parties ON parties.id = all_guests.party_id
+    JOIN users ON parties.user_id = users.id
+    LEFT JOIN guests ON parties.id = guests.party_id
+    WHERE all_guests.user_id = ?
+    GROUP BY parties.id
     """
     result = db.query(sql, [user_id])
     parties = [
@@ -113,6 +122,7 @@ def get_attended(user_id):
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
+            "guest_count": party[7],
         }
         for party in result
     ]
@@ -205,11 +215,14 @@ def search_parties(query: str) -> list:
              , parties.user_id
              , users.displayname
              , categories.name
+             , COUNT (guests.id)
              FROM parties
              LEFT JOIN users ON parties.user_id = users.id
              LEFT JOIN party_categories ON parties.id = party_categories.party_id
              LEFT JOIN categories ON party_categories.category_id = categories.id
+             LEFT JOIN guests ON parties.id = guests.party_id
              WHERE title LIKE ? OR description LIKE ?
+             GROUP BY parties.id
              ORDER BY start_date ASC"""
     like = f"%{query}%"
     result = db.query(sql, [like, like])
@@ -223,6 +236,7 @@ def search_parties(query: str) -> list:
             "organizer_id": party[5],
             "organizer_displayname": party[6],
             "category": party[7],
+            "guest_count": party[8],
         }
         for party in result
         # sqlite doesn't know how to do date comparison

@@ -20,10 +20,15 @@
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
     {% if party.category %}
+      <br>
       <span class="category {{ party.category }}">{{ party.category }}</span>
     {% endif %}
-    <br>
-    <!-- Vieraiden määrä: {{ party.guest_count }} -->
+    {% if party.guest_count %}
+      <br>
+      <span>
+      Vieraiden määrä: {{ party.guest_count }}
+      </span>
+    {% endif %}
   </div>
   {% endfor %}
 </ul>

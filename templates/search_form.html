@@ -17,25 +17,33 @@
 
 {% if query %}
 <h3>Tulokset</h3>
-
+<span>{{count}} tulosta</span>
 <ul class="parties">
   {% for party in parties %}
   <div class="party">
     <a href="/party/{{ party.id }}">{{ party.title }}</a>
     <br>
-    Järjestäjä: <a href="/user/{{ party.organizer_id }}">{{ party.organizer_displayname }}</a>
-    <br>
+    <span>
+      Järjestäjä: <a href="/user/{{ party.organizer_id }}">{{ party.organizer_displayname }}</a>
+    </span>
     {% if party.entry_fee %}
+      <br>
       <span class="fee">{{ party.entry_fee }} &euro;</span>
     {%else%}
+      <br>
       <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
     {% if party.category %}
+      <br>
       <span class="category {{ party.category }}">{{ party.category }}</span>
     {% endif %}
+    {% if party.guest_count %}
     <br>
-    <!-- Vieraiden määrä: {{ party.guest_count }} -->
+    <span>
+      Vieraiden määrä: {{ party.guest_count }}
+    </span>
+    {% endif %}
   </div>
   {% endfor %}
 </ul>
