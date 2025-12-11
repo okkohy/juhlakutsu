@@ -7,7 +7,7 @@
 <form action="/create" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
   <br>
-  <label for="title" class="required" title="Pakollinen kenttä">Juhlien nimi</label> <br>
+  <label for="title" class="required" title="Pakollinen kenttä. 1-49 merkkiä">Juhlien nimi</label> <br>
   <input
       type="text"
       id="title"
@@ -16,7 +16,7 @@
       maxlength="50"
       required>
   <br>
-  <label for="description" class="required" title="Pakollinen kenttä">Kuvaus</label> <br>
+  <label for="description" class="required" title="Pakollinen kenttä. 1-1999 merkkiä">Kuvaus</label> <br>
   <textarea
       id="description"
       rows="8"
