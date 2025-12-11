@@ -18,13 +18,13 @@ Kurssille tietokannat ja web-ohjelmointi
 
 [Raportti](./performance.md)
 
-## Sovelluksen asentaminen
-
-Helpointa on käyttää [Nix] työkalua:
-
 ## Pylint raportti
 
 [Raportti](./pylint-report.md)
+
+## Sovelluksen asentaminen
+
+Helpointa on käyttää [Nix] työkalua:
 
 ```sh
 # Ajetaan kehitysversio

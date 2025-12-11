@@ -2,7 +2,7 @@
 
 Olin toteuttanut sovellukseen jo sivutuksen valmiiksi ennen suuren tietomäärän luomista.
 
-Ensiki [seed.py](./seed.py) skriptillä luotiin 1000 käyttäjää, 100 000 juhlaa ja 1 000 000 ilmottautumista tietokantaan.
+Ensiksi loin [seed.py](./seed.py) skriptillä 1000 käyttäjää, 100 000 juhlaa ja 1 000 000 ilmottautumista tietokantaan.
 
 Lisäsin [app.py](./app.py) seuraavat rivit:
 ```py
@@ -65,4 +65,4 @@ elapsed time: 0.01 s
 127.0.0.1 - - [11/Dec/2025 14:35:43] "GET /party/5 HTTP/1.1" 200 -
 ```
 
-/login ja /register toiminnot kestivät suunnilleen 0.05 s kumpikin tämän jälkeen, mutta indeksin luominen ei näyttänyt vaikuttavan siihen, joten en tehnyt niille mitään. Kun nämä kaksi indeksiä oli lisätty en möyskään nähnyt tarpeelliseksi lisätä ideksiä esimerkiksi kategoria tauluun (party\_categories )
+`/login` ja `/register` toiminnot kestivät suunnilleen 0.05 s kumpikin tämän jälkeen, mutta indeksin luominen ei näyttänyt vaikuttavan siihen, joten en tehnyt niille mitään. Kun nämä kaksi indeksiä oli lisätty en möyskään nähnyt tarpeelliseksi lisätä ideksiä esimerkiksi kategoria tauluun (party\_categories)
