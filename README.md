@@ -22,6 +22,10 @@ Kurssille tietokannat ja web-ohjelmointi
 
 Helpointa on käyttää [Nix] työkalua:
 
+## Pylint raportti
+
+[Raportti](./pylint-report.md)
+
 ```sh
 # Ajetaan kehitysversio
 nix run
