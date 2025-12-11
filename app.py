@@ -6,7 +6,7 @@ import secrets
 import markupsafe
 from flask import Flask
 from flask import redirect, render_template, request, flash, make_response
-from flask import session, g
+from flask import session
 from flask.helpers import abort
 import src.db as db
 
@@ -14,18 +14,8 @@ import src.users as users
 import src.party as party
 
 app = Flask(__name__)
-# app.secret_key = secrets.token_hex(16)
-app.secret_key = "18fd24bf6a2ad4dac04a33963db1c42f"
+app.secret_key = secrets.token_hex(16)
 
-@app.before_request
-def before_request():
-    g.start_time = time.time()
-
-@app.after_request
-def after_request(response):
-    elapsed_time = round(time.time() - g.start_time, 2)
-    print("elapsed time:", elapsed_time, "s")
-    return response
 
 @app.template_filter()
 def show_lines(content):
@@ -243,8 +233,6 @@ def show_user(user_id: int):
     maybe_user = users.get_user(user_id)
     parties = users.get_parties(user_id)
     attended_parties = party.get_attended(user_id)
-
-    current_user_id = session.get("user_id")
 
     party_count = len(parties)
     attend_count = len(attended_parties)
