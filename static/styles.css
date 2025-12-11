@@ -66,6 +66,7 @@ p {
   background-color: lightcoral;
   border-radius: 5px;
   padding: 1px 5px;
+  text-wrap: nowrap;
 }
 span.free {
   background-color: #86e27e;

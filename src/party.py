@@ -2,7 +2,7 @@ import src.db as db
 from datetime import datetime, timedelta
 from flask import session
 
-PARTIES_PER_PAGE = 20
+PARTIES_PER_PAGE = 21 # = 7 * 3
 
 
 def party_count():
