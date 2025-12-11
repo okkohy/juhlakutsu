@@ -1,7 +1,7 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session, request, abort
-import src.db as db
-import src.party as fest
+from src import db
+from src import party as fest
 
 
 def get_user(user_id: int) -> dict | None:
@@ -15,6 +15,8 @@ def get_user(user_id: int) -> dict | None:
             "username": result[0][0],
             "displayname": result[0][1],
         }
+    else:
+        return None
 
 
 def create_user(username, displayname, password1, password2):

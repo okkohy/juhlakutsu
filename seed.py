@@ -1,7 +1,6 @@
 import random
 import secrets
 import sqlite3
-import time
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timedelta
 
@@ -16,9 +15,12 @@ attendee_count = 10**6
 category_count = 9
 
 for i in range(1, user_count + 1):
-    password = generate_password_hash(secrets.token_hex(12))
+    p = secrets.token_hex(12)
+    password = generate_password_hash(p)
     displayname = f"user_d_{i}"
     username = "user" + str(i)
+    if i == 1:
+        print(f"user: {username}, pass={p}")
     db.execute("INSERT INTO users (username, displayname, password_hash) VALUES (?, ?, ?)",
                [username, displayname, password])
 

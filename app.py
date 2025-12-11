@@ -8,10 +8,10 @@ from flask import Flask
 from flask import redirect, render_template, request, flash, make_response
 from flask import session
 from flask.helpers import abort
-import src.db as db
 
-import src.users as users
-import src.party as party
+from src import db
+from src import users
+from src import party
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)

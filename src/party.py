@@ -1,6 +1,6 @@
-import src.db as db
 from datetime import datetime, timedelta
 from flask import session
+from src import db
 
 PARTIES_PER_PAGE = 21  # = 7 * 3
 
