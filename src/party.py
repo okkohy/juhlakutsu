@@ -98,7 +98,8 @@ def get_attended(user_id):
     , parties.entry_fee
     , parties.user_id
     , users.displayname
-    FROM parties RIGHT JOIN guests ON parties.id = guests.party_id
+    FROM guests
+    LEFT JOIN parties ON parties.id = guests.party_id
     LEFT JOIN users ON parties.user_id = users.id
     WHERE guests.user_id = ?
     """

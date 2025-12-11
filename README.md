@@ -14,6 +14,9 @@ Kurssille tietokannat ja web-ohjelmointi
 - [x] Käyttäjä pystyy valitsemaan juhlille yhden tai useamman luokittelun. Luokat ovat tietokannassa.
 - [x] Sovelluksessa on pääasiallisen juhlien lisäksi toissijainen tietokohde ilmottautuminen, joka täydentää juhlaa.
 
+## Sovelluksen testaaminen suurella tietomäärällä
+
+[Raportti](./performance.md)
 
 ## Sovelluksen asentaminen
 

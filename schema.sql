@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT
-    , username TEXT UNIQUE
+    , username TEXT UNIQUE NOT NULL
     , displayname TEXT NOT NULL
     , password_hash TEXT NOT NULL
 );
@@ -8,8 +8,8 @@ CREATE TABLE users (
 CREATE TABLE parties (
     id INTEGER PRIMARY KEY AUTOINCREMENT
     , title TEXT NOT NULL
-    , description TEXT
-    , start_date DATETIME
+    , description TEXT NOT NULL
+    , start_date DATETIME NOT NULL
     , entry_fee INTEGER
     , user_id INTEGER /* organizer id */
     /* if organizer is deleted, delete party */
@@ -23,7 +23,7 @@ CREATE TABLE guests (
     id INTEGER PRIMARY KEY AUTOINCREMENT
     , party_id INTEGER
     , user_id INTEGER
-    /* if the user or party is deleted, 
+    /* if the user or party is deleted,
      delete the guest from guest list */
     , CONSTRAINT fk_user_parties
       FOREIGN KEY (user_id)
@@ -53,3 +53,6 @@ CREATE TABLE party_categories (
       REFERENCES categories (id)
       ON DELETE CASCADE
 );
+
+CREATE INDEX idx_user_attended ON guests (user_id);
+CREATE INDEX idx_party_guests ON guests (party_id);
