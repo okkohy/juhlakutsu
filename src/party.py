@@ -196,7 +196,6 @@ def search_parties(query: str) -> list:
     # ORDER BY ASC makes sure that the parties
     # get shown such that the party that will start
     # soonest will be first
-    # TODO: Filter parties where today > start_date
     sql = """SELECT
              parties.id
              , parties.title
@@ -226,6 +225,9 @@ def search_parties(query: str) -> list:
             "category": party[7],
         }
         for party in result
+        # sqlite doesn't know how to do date comparison
+        # so have to do it like this
+        if parse_db_date(party[3]) > datetime.today()
     ]
     return parties
 
