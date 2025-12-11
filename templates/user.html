@@ -17,8 +17,12 @@
       <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
-    <br>
+    {% if party.category %}
+      <br>
+      <span class="category {{ party.category }}">{{ party.category }}</span>
+    {% endif %}
     {% if party.guest_count %}
+      <br>
       <span>
       Vieraiden määrä: {{ party.guest_count }}
       </span>
@@ -42,6 +46,10 @@
       <span class="free">Ilmanen</span>
     {% endif %}
     <span class="datetime">{{ party.start_date }}</span>
+    {% if party.category %}
+      <br>
+      <span class="category {{ party.category }}">{{ party.category }}</span>
+    {% endif %}
     {% if party.guest_count %}
       <br>
       <span>

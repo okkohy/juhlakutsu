@@ -104,10 +104,13 @@ def get_attended(user_id):
     , parties.entry_fee
     , parties.user_id
     , users.displayname
+    , categories.name
     , COUNT (guests.id)
     FROM guests all_guests
     JOIN parties ON parties.id = all_guests.party_id
     JOIN users ON parties.user_id = users.id
+    LEFT JOIN party_categories ON parties.id = party_categories.party_id
+    LEFT JOIN categories ON party_categories.category_id = categories.id
     LEFT JOIN guests ON parties.id = guests.party_id
     WHERE all_guests.user_id = ?
     GROUP BY parties.id
@@ -122,7 +125,8 @@ def get_attended(user_id):
             "entry_fee": party[4],
             "organizer_id": party[5],
             "organizer_displayname": party[6],
-            "guest_count": party[7],
+            "category": party[7],
+            "guest_count": party[8],
         }
         for party in result
     ]
