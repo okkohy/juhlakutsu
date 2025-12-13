@@ -216,7 +216,7 @@ def edit_party(party_id, new_title, new_description, new_start_date, new_entry_f
     )
 
 
-def search_parties(query: str) -> list:
+def search_parties(query: str) -> tuple[int, list]:
     # ORDER BY ASC makes sure that the parties
     # get shown such that the party that will start
     # soonest will be first
@@ -257,7 +257,7 @@ def search_parties(query: str) -> list:
         # so have to do it like this
         if parse_db_date(party[3]) > datetime.today()
     ]
-    return parties
+    return len(parties), parties
 
 
 def get_guests(party_id: int) -> list:

@@ -260,11 +260,11 @@ def show_user(user_id: int):
 def search():
     query = request.args.get("query")
     if query is not None:
-        parties = party.search_parties(query)
+        count, parties = party.search_parties(query)
         for p in parties:
             start_date = p["start_date"]
             p["start_date"] = party.format_start_date(start_date, True)
-        return render_template("search_form.html", query=query, parties=parties)
+        return render_template("search_form.html", query=query, parties=parties, count=count)
     else:
         return render_template("search_form.html")
 
