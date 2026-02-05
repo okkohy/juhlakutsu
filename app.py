@@ -6,7 +6,7 @@ import markupsafe
 from flask import Flask
 from flask import redirect, render_template, request, flash, make_response
 from flask import session
-from flask.helpers import abort
+from flask import abort
 
 from src import db
 from src import users
