@@ -35,7 +35,7 @@ Voidaan myös käynnistää kehitysympäristö:
 nix develop
 ```
 
-On mahdollista myös käyttää valmiiksi asennettua Pythonia. Projekti on tehty Python versiolla 3.11.14. Jos jokin seuraavista ohjeista ei toimi, kannattaa katsoa `flake.nix` tiedostoa, mitä komentoja pitäisi suorittaa.
+On mahdollista myös käyttää valmiiksi asennettua Pythonia. Projekti on tehty Python versiolla 3.11.14 ja sqlite versiota 3.50.4. Jos jokin seuraavista ohjeista ei toimi, kannattaa katsoa `flake.nix` tiedostoa, mitä komentoja pitäisi suorittaa.
 
 
 ```sh
@@ -47,7 +47,7 @@ pip3 install -U flask
 sqlite3 database.db < schema.sql
 sqlite3 database.db < init.sql
 
-flask --app src/main run
+flask run
 ```
 
 [Nix]: <https://nixos.org/> "Nix package manager"
