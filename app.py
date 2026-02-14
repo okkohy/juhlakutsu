@@ -83,7 +83,7 @@ def register():
             return render_template("register_form.html", filled=filled)
 
         flash("Tunnus luotu")
-        return redirect("/")
+        return redirect("/login")
     else:
         abort(make_response("Illegal method"))
 
