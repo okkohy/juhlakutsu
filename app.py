@@ -26,7 +26,7 @@ def show_lines(content):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login_form.html")
+        return render_template("login_form.html", filled={})
 
     if request.method == "POST":
         username = request.form["username"]
@@ -46,7 +46,8 @@ def login():
             return redirect("/")
         else:
             flash("VIRHE: väärä tunnus tai salasana")
-            return redirect("/login")
+            filled = {"username": username}
+            return render_template("login_form.html", filled=filled)
     else:
         abort(make_response("Illegal method"))
 
@@ -62,7 +63,7 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register_form.html")
+        return render_template("register_form.html", filled={})
     elif request.method == "POST":
 
         username = request.form["username"]
@@ -74,10 +75,12 @@ def register():
             users.create_user(username, displayname, password1, password2)
         except sqlite3.IntegrityError:
             flash("VIRHE: tunnus on jo varattu")
-            return redirect("/register")
+            filled = {"username": username, "displayname": displayname}
+            return render_template("register_form.html", filled=filled)
         except ValueError as er:
             flash(str(er))
-            return redirect("/register")
+            filled = {"username": username, "displayname": displayname}
+            return render_template("register_form.html", filled=filled)
 
         flash("Tunnus luotu")
         return redirect("/")
@@ -87,14 +90,14 @@ def register():
 
 @app.route("/create", methods=["GET", "POST"])
 def create_party():
+
+    categories = party.get_categories()
+    yesterday = datetime.today().date().strftime("%Y-%m-%dT%H:%M")
+    max_date = (datetime.today().date() + timedelta(365 * 5)).strftime("%Y-%m-%dT%H:%M")
     if request.method == "GET":
-        categories = party.get_categories()
-        yesterday = datetime.today().date().strftime("%Y-%m-%dT%H:%M")
-        max_date = (datetime.today().date() + timedelta(365 * 5)).strftime(
-            "%Y-%m-%dT%H:%M"
-        )
         return render_template(
             "create_form.html",
+            filled={},
             categories=categories,
             yesterday=yesterday,
             max_date=max_date,
@@ -114,7 +117,20 @@ def create_party():
             )
         except ValueError as err:
             flash(str(err))
-            return redirect("/create")
+            filled = {
+                "title": title,
+                "description": description,
+                "start_date": start_date,
+                "entry_fee": entry_fee,
+                # "category_id": category_id, # bug in template handling, so dsabled
+            }
+            return render_template(
+                "create_form.html",
+                filled=filled,
+                categories=categories,
+                yesterday=yesterday,
+                max_date=max_date,
+            )
 
         return redirect(f"/party/{party_id}")
     else:
@@ -264,7 +280,9 @@ def search():
         for p in parties:
             start_date = p["start_date"]
             p["start_date"] = party.format_start_date(start_date, True)
-        return render_template("search_form.html", query=query, parties=parties, count=count)
+        return render_template(
+            "search_form.html", query=query, parties=parties, count=count
+        )
     else:
         return render_template("search_form.html")
 

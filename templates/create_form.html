@@ -14,6 +14,7 @@
       name="title"
       placeholder="Juhlien nimi"
       maxlength="50"
+      value="{{ filled.title }}"
       required>
   <br>
   <label for="description" class="required" title="Pakollinen kenttä. 1-1999 merkkiä">Kuvaus</label> <br>
@@ -24,7 +25,7 @@
       name="description"
       placeholder="Kuvaus"
       maxlength="2000"
-      required></textarea>
+      required>{{ filled.description }}</textarea>
   <br>
   <label for="start_date" class="required" title="Pakollinen kenttä">Alkamis ajankohta</label> <br>
   <input
@@ -34,13 +35,14 @@
       placeholder="Valitse"
       min="{{ yesterday }}"
       max="{{ max_date }}"
+      value="{{ filled.start_date }}"
       required>
   <br>
   <label for="category">Valitse kategoria</label> <br>
   <select name="category">
     <option value="">valitse</option>
     {% for category in categories %}
-    <option value="{{ category.id }}">{{ category.name }}</option>
+      <option value="{{ category.id }}">{{ category.name }}</option>
     {% endfor %}
   </select>
   <br>
@@ -49,6 +51,7 @@
       type="number"
       id="entry_fee"
       name="entry_fee"
+      value="{{ filled.entry_fee }}"
       placeholder="Hinta (&euro;)"
       >
   <br>
